@@ -1,32 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "processo.h"
 #include "so.h"
 
 #define INI_MEM_PROC 100
 
-struct processo_t{
-    int id;
-    int PC;
-    int A;
-    int X;
-    int* memIni;
-    int* memFim;
-    int t_cpu;
-    int n_exec;
-    estado_proc estado;
-    float prio;
-};
+processo_t inicializa_processo(processo_t processo, int id){
+    processo.id = id;
+    processo.PC = 0;
+    processo.A = 0;
+    processo.X = 0;
+    //processos[i]->memIni = 
+    //processos[i]->memFim = 
+    processo.t_cpu = 0;
+    processo.n_exec = 0;
+    processo.estado = pronto;
+    processo.prio = 0;
+    return processo;
+}
 
-processo_t inicializa_processos(processo_t *processos){
+processo_t *inicializa_processos(processo_t processos[MAX_PROCESSOS]){
     for(int i = 1; i < MAX_PROCESSOS; i++){
-        processos[i]->id = i;
-        processos[i]->A = 0;
-        processos[i]->X = 0;
-        //processos[i]->memIni = 
-        //processos[i]->memFim = 
-        processos[i]->t_cpu = 0;
-        processos[i]->n_exec = 0;
-        processos[i]->estado = vivo;
-        processos[i]->prio = 0;
-
+        inicializa_processo(processos[i], i);
     }
+    return processos;
 }

@@ -37,6 +37,7 @@ struct so_t {
   // t2: tabela de processos, processo corrente, pendências, etc
   processo_t processos[MAX_PROCESSOS];
   processo_t *processo_corrente;
+  int cont_processos; 
 };
 
 
@@ -64,6 +65,7 @@ so_t *so_cria(cpu_t *cpu, mem_t *mem, es_t *es, console_t *console)
   self->es = es;
   self->console = console;
   self->erro_interno = false;
+  self->cont_processos = 0;
 
   // quando a CPU executar uma instrução CHAMAC, deve chamar a função
   //   so_trata_interrupcao, com primeiro argumento um ptr para o SO
@@ -417,11 +419,15 @@ static void so_chamada_cria_proc(so_t *self)
   // ainda sem suporte a processos, carrega programa e passa a executar ele
   // quem chamou o sistema não vai mais ser executado, coitado!
   // t2: deveria criar um novo processo
-
+  processo_t processo = inicializa_processo(processo, self->cont_processos);    /*funcao que atribui dados*/
+  self->processos[self->cont_processos] = processo;       /*guarda dados do processo criado no SO*/
+  self->cont_processos++;     /*contém a quantidade de processos*/
   // em X está o endereço onde está o nome do arquivo
   int ender_proc;
   // t2: deveria ler o X do descritor do processo criador
   ender_proc = self->regX;
+  /*processo criador = init?*/
+
   char nome[100];
   if (copia_str_da_mem(100, nome, self->mem, ender_proc)) {
     int ender_carga = so_carrega_programa(self, nome);
@@ -433,7 +439,11 @@ static void so_chamada_cria_proc(so_t *self)
   }
   // deveria escrever -1 (se erro) ou o PID do processo criado (se OK) no reg A
   //   do processo que pediu a criação
-  self->regA = -1;
+  if(ERR_OK){
+    self->regA = processo.id;
+  }
+  else
+    self->regA = -1;
 }
 
 // implementação da chamada se sistema SO_MATA_PROC
