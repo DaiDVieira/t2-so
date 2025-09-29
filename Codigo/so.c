@@ -13,6 +13,7 @@
 #include "irq.h"
 #include "memoria.h"
 #include "programa.h"
+#include "processo.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -34,6 +35,8 @@ struct so_t {
 
   int regA, regX, regPC, regERRO; // cópia do estado da CPU
   // t2: tabela de processos, processo corrente, pendências, etc
+  processo_t processos[MAX_PROCESSOS];
+  processo_t *processo_corrente;
 };
 
 
