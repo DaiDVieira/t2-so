@@ -13,6 +13,7 @@
 #include "irq.h"
 #include "memoria.h"
 #include "programa.h"
+#include "cpu.h"
 #include "processo.h"
 
 #include <stdlib.h>
@@ -46,7 +47,7 @@ static int so_trata_interrupcao(void *argC, int reg_A);
 
 // funções auxiliares
 // carrega o programa contido no arquivo na memória do processador; retorna end. inicial
-static int so_carrega_programa(so_t *self, char *nome_do_executavel);
+static programa_t* so_carrega_programa(so_t *self, char *nome_do_executavel);
 // copia para str da memória do processador, até copiar um 0 (retorna true) ou tam bytes
 static bool copia_str_da_mem(int tam, char str[tam], mem_t *mem, int ender);
 
@@ -131,12 +132,15 @@ static void so_salva_estado_da_cpu(so_t *self)
   //   CPU na memória, nos endereços CPU_END_PC etc. O registrador X foi salvo
   //   pelo tratador de interrupção (ver trata_irq.asm) no endereço 59
   // se não houver processo corrente, não faz nada
-  if (mem_le(self->mem, CPU_END_A, &self->regA) != ERR_OK
-      || mem_le(self->mem, CPU_END_PC, &self->regPC) != ERR_OK
-      || mem_le(self->mem, CPU_END_erro, &self->regERRO) != ERR_OK
-      || mem_le(self->mem, 59, &self->regX)) {
-    console_printf("SO: erro na leitura dos registradores");
-    self->erro_interno = true;
+
+  if(self->processo_corrente != NULL){
+    if (mem_le(self->mem, CPU_END_A, &self->processo_corrente->A) != ERR_OK
+        || mem_le(self->mem, CPU_END_PC, &self->processo_corrente->PC) != ERR_OK
+        || mem_le(self->mem, CPU_END_erro, &self->regERRO) != ERR_OK
+        || mem_le(self->mem, 59, &self->processo_corrente->X)) {
+      console_printf("SO: erro na leitura dos registradores");
+      self->erro_interno = true;
+    }
   }
 }
 
@@ -166,13 +170,20 @@ static int so_despacha(so_t *self)
   //   senão retorna 1
   // o valor retornado será o valor de retorno de CHAMAC, e será colocado no 
   //   registrador A para o tratador de interrupção (ver trata_irq.asm).
-  if (mem_escreve(self->mem, CPU_END_A, self->regA) != ERR_OK
+
+  if(self->processo_corrente != NULL){
+    if(mem_escreve(self->mem, CPU_END_A, self->regA) != ERR_OK
       || mem_escreve(self->mem, CPU_END_PC, self->regPC) != ERR_OK
       || mem_escreve(self->mem, CPU_END_erro, self->regERRO) != ERR_OK
       || mem_escreve(self->mem, 59, self->regX)) {
-    console_printf("SO: erro na escrita dos registradores");
-    self->erro_interno = true;
+      console_printf("SO: erro na escrita dos registradores do processo %d.", self->processo_corrente->id);
+      self->erro_interno = true;
+    }
   }
+  else{
+    return 1;
+  }
+
   if (self->erro_interno) return 1;
   else return 0;
 }
@@ -221,11 +232,17 @@ static void so_trata_reset(so_t *self)
   //   de interrupção (escrito em asm). esse programa deve conter a
   //   instrução CHAMAC, que vai chamar so_trata_interrupcao (como
   //   foi definido na inicialização do SO)
-  int ender = so_carrega_programa(self, "trata_int.maq");
+  /*int ender = so_carrega_programa(self, "trata_int.maq");
   if (ender != CPU_END_TRATADOR) {
     console_printf("SO: problema na carga do programa de tratamento de interrupção");
     self->erro_interno = true;
+  }*/
+  programa_t *prog = so_carrega_programa(self, "trata_int.maq"); 
+  if (prog_end_carga(prog) != CPU_END_TRATADOR) {
+    console_printf("SO: problema na carga do programa de tratamento de interrupção");
+    self->erro_interno = true;
   }
+  prog_destroi(prog);
 
   // programa o relógio para gerar uma interrupção após INTERVALO_INTERRUPCAO
   if (es_escreve(self->es, D_RELOGIO_TIMER, INTERVALO_INTERRUPCAO) != ERR_OK) {
@@ -242,17 +259,19 @@ static void so_trata_reset(so_t *self)
   //   carregar para os seus registradores quando executar a instrução RETI
   //   em bios.asm (que é onde está a instrução CHAMAC que causou a execução
   //   deste código
-
   // coloca o programa init na memória
-  ender = so_carrega_programa(self, "init.maq");
-  if (ender != 100) {
-    console_printf("SO: problema na carga do programa inicial");
-    self->erro_interno = true;
-    return;
-  }
+  programa_t *proginit = so_carrega_programa(self, "init.maq");
+  processo_t init = inicializa_processo(init, 0, prog_end_carga(proginit), prog_tamanho(proginit));
+  prog_destroi(proginit);
+
+  self->cont_processos = 0;
+  self->processos[self->cont_processos] = init;       /*guarda dados do processo criado no SO*/
+  self->processo_corrente = &self->processos[self->cont_processos];
+  self->cont_processos++;     /*a quantidade de processos vira 1*/
 
   // altera o PC para o endereço de carga
-  self->regPC = ender; // deveria ser no processo
+  //self->regPC = ender; // deveria ser no processo 
+  /*--> inicializa_processo() ja atribuiu o endereco*/
 }
 
 // interrupção gerada quando a CPU identifica um erro
@@ -310,7 +329,10 @@ static void so_trata_irq_chamada_sistema(so_t *self)
 {
   // a identificação da chamada está no registrador A
   // t2: com processos, o reg A deve estar no descritor do processo corrente
-  int id_chamada = self->regA;
+
+  //int id_chamada = self->regA;
+
+  int id_chamada = self->processo_corrente->A;
   console_printf("SO: chamada de sistema %d", id_chamada);
   switch (id_chamada) {
     case SO_LE:
@@ -331,6 +353,7 @@ static void so_trata_irq_chamada_sistema(so_t *self)
     default:
       console_printf("SO: chamada de sistema desconhecida (%d)", id_chamada);
       // t2: deveria matar o processo
+      so_chamada_mata_proc(self);
       self->erro_interno = true;
   }
 }
@@ -373,6 +396,11 @@ static void so_chamada_le(so_t *self)
   // t2: se houvesse processo, deveria escrever no reg A do processo
   // t2: o acesso só deve ser feito nesse momento se for possível; se não, o processo
   //   é bloqueado, e o acesso só deve ser feito mais tarde (e o processo desbloqueado)
+  
+  if(self->processo_corrente != NULL){
+    self->processo_corrente->A = dado;
+  }
+
   self->regA = dado;
 }
 
@@ -419,31 +447,36 @@ static void so_chamada_cria_proc(so_t *self)
   // ainda sem suporte a processos, carrega programa e passa a executar ele
   // quem chamou o sistema não vai mais ser executado, coitado!
   // t2: deveria criar um novo processo
-  processo_t processo = inicializa_processo(processo, self->cont_processos);    /*funcao que atribui dados*/
-  self->processos[self->cont_processos] = processo;       /*guarda dados do processo criado no SO*/
-  self->cont_processos++;     /*contém a quantidade de processos*/
   // em X está o endereço onde está o nome do arquivo
-  int ender_proc;
   // t2: deveria ler o X do descritor do processo criador
-  ender_proc = self->regX;
-  /*processo criador = init?*/
+  //ender_proc = self->regX;
+  int ender_proc, indice_proc;
+  ender_proc = self->processo_corrente->X;
+  processo_t processo;
 
   char nome[100];
   if (copia_str_da_mem(100, nome, self->mem, ender_proc)) {
-    int ender_carga = so_carrega_programa(self, nome);
-    if (ender_carga > 0) {
+    programa_t *prog = so_carrega_programa(self, nome, &processo);
+    processo = inicializa_processo(processo, 0, prog_end_carga(prog), prog_tamanho(prog));
+    prog_destroi(prog);
+    self->processos[self->cont_processos] = processo;       /*guarda dados do processo criado no SO*/
+    self->cont_processos++;     /*contém a quantidade de processos*/
+    if (processo.PC > 0) {
       // t2: deveria escrever no PC do descritor do processo criado
-      self->regPC = ender_carga;
+      //self->regPC = ender_carga;
+      /*if((indice_proc = encontra_indice_processo(self->processos, processo)) != -1)
+        self->processos[indice_proc].PC = ender_carga;*/
+
       return;
     } // else?
   }
   // deveria escrever -1 (se erro) ou o PID do processo criado (se OK) no reg A
   //   do processo que pediu a criação
   if(ERR_OK){
-    self->regA = processo.id;
+    self->processo_corrente->A = processo.id;
   }
   else
-    self->regA = -1;
+    self->processo_corrente->A = -1;
 }
 
 // implementação da chamada se sistema SO_MATA_PROC
@@ -473,13 +506,13 @@ static void so_chamada_espera_proc(so_t *self)
 
 // carrega o programa na memória
 // retorna o endereço de carga ou -1
-static int so_carrega_programa(so_t *self, char *nome_do_executavel)
+static programa_t* so_carrega_programa(so_t *self, char *nome_do_executavel)
 {
   // programa para executar na nossa CPU
   programa_t *prog = prog_cria(nome_do_executavel);
   if (prog == NULL) {
     console_printf("Erro na leitura do programa '%s'\n", nome_do_executavel);
-    return -1;
+    return NULL;
   }
 
   int end_ini = prog_end_carga(prog);
@@ -488,13 +521,12 @@ static int so_carrega_programa(so_t *self, char *nome_do_executavel)
   for (int end = end_ini; end < end_fim; end++) {
     if (mem_escreve(self->mem, end, prog_dado(prog, end)) != ERR_OK) {
       console_printf("Erro na carga da memória, endereco %d\n", end);
-      return -1;
+      return NULL;
     }
   }
 
-  prog_destroi(prog);
   console_printf("SO: carga de '%s' em %d-%d", nome_do_executavel, end_ini, end_fim);
-  return end_ini;
+  return prog;
 }
 
 
