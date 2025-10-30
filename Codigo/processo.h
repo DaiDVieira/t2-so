@@ -11,6 +11,8 @@ struct processo_t{
     int PC;
     int A;
     int X;
+    int erro;
+    err_t regErro;
     int* memIni;
     int* memTam;
     int t_cpu;
@@ -24,7 +26,7 @@ typedef struct processo_t processo_t;
 
 //processo_t inicializa_init(processo_t processo);
 //processo_t *inicializa_processos(processo_t processos[MAX_PROCESSOS]);
-processo_t inicializa_processo(processo_t processo, int id, int PC, int tam);
+processo_t* inicializa_processo(processo_t processo, int id, int PC, int tam);
 int encontra_indice_processo(processo_t processos[MAX_PROCESSOS], processo_t processo);
 
 #endif

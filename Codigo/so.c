@@ -125,7 +125,7 @@ static int so_trata_interrupcao(void *argC, int reg_A)
   return so_despacha(self);
 }
 
-static void so_salva_estado_da_cpu(so_t *self)
+static void so_salva_estado_da_cpu(so_t *self)    /*Feito*/
 {
   // t2: salva os registradores que compõem o estado da cpu no descritor do
   //   processo corrente. os valores dos registradores foram colocados pela
@@ -136,8 +136,8 @@ static void so_salva_estado_da_cpu(so_t *self)
   if(self->processo_corrente != NULL){
     if (mem_le(self->mem, CPU_END_A, &self->processo_corrente->A) != ERR_OK
         || mem_le(self->mem, CPU_END_PC, &self->processo_corrente->PC) != ERR_OK
-        || mem_le(self->mem, CPU_END_erro, &self->regERRO) != ERR_OK
-        || mem_le(self->mem, 59, &self->processo_corrente->X)) {
+        || mem_le(self->mem, CPU_END_erro, &self->processo_corrente->regErro) != ERR_OK
+        || mem_le(self->mem, 59, &self->processo_corrente->X) != ERR_OK) {
       console_printf("SO: erro na leitura dos registradores");
       self->erro_interno = true;
     }
@@ -163,7 +163,7 @@ static void so_escalona(so_t *self)
   //   depois, implementa um escalonador melhor
 }
 
-static int so_despacha(so_t *self)
+static int so_despacha(so_t *self)  /*Feito*/
 {
   // t2: se houver processo corrente, coloca o estado desse processo onde ele
   //   será recuperado pela CPU (em CPU_END_PC etc e 59) e retorna 0,
@@ -172,10 +172,10 @@ static int so_despacha(so_t *self)
   //   registrador A para o tratador de interrupção (ver trata_irq.asm).
 
   if(self->processo_corrente != NULL){
-    if(mem_escreve(self->mem, CPU_END_A, self->regA) != ERR_OK
-      || mem_escreve(self->mem, CPU_END_PC, self->regPC) != ERR_OK
-      || mem_escreve(self->mem, CPU_END_erro, self->regERRO) != ERR_OK
-      || mem_escreve(self->mem, 59, self->regX)) {
+    if(mem_escreve(self->mem, CPU_END_A, self->processo_corrente->A) != ERR_OK
+      || mem_escreve(self->mem, CPU_END_PC, self->processo_corrente->PC) != ERR_OK
+      || mem_escreve(self->mem, CPU_END_erro, self->processo_corrente->regErro) != ERR_OK
+      || mem_escreve(self->mem, 59, self->processo_corrente->X) != ERR_OK) {
       console_printf("SO: erro na escrita dos registradores do processo %d.", self->processo_corrente->id);
       self->erro_interno = true;
     }
@@ -261,11 +261,11 @@ static void so_trata_reset(so_t *self)
   //   deste código
   // coloca o programa init na memória
   programa_t *proginit = so_carrega_programa(self, "init.maq");
-  processo_t init = inicializa_processo(init, 0, prog_end_carga(proginit), prog_tamanho(proginit));
+  processo_t *init = inicializa_processo(*init, 0, prog_end_carga(proginit), prog_tamanho(proginit));
   prog_destroi(proginit);
 
   self->cont_processos = 0;
-  self->processos[self->cont_processos] = init;       /*guarda dados do processo criado no SO*/
+  self->processos[self->cont_processos] = *init;       /*guarda dados do processo criado no SO*/
   self->processo_corrente = &self->processos[self->cont_processos];
   self->cont_processos++;     /*a quantidade de processos vira 1*/
 
@@ -284,7 +284,10 @@ static void so_trata_irq_err_cpu(so_t *self)
   // t2: com suporte a processos, deveria pegar o valor do registrador erro
   //   no descritor do processo corrente, e reagir de acordo com esse erro
   //   (em geral, matando o processo)
-  err_t err = self->regERRO;
+  // err_t err = self->regERRO;
+  mem_le(self->mem, CPU_END_erro, &self->processo_corrente->regErro);
+  err_t err = self->processo_corrente->regErro;
+  
   console_printf("SO: IRQ não tratada -- erro na CPU: %s", err_nome(err));
   self->erro_interno = true;
 }
@@ -452,31 +455,35 @@ static void so_chamada_cria_proc(so_t *self)
   //ender_proc = self->regX;
   int ender_proc, indice_proc;
   ender_proc = self->processo_corrente->X;
-  processo_t processo;
+  processo_t *processo;
 
   char nome[100];
   if (copia_str_da_mem(100, nome, self->mem, ender_proc)) {
-    programa_t *prog = so_carrega_programa(self, nome, &processo);
-    processo = inicializa_processo(processo, 0, prog_end_carga(prog), prog_tamanho(prog));
+    programa_t *prog = so_carrega_programa(self, nome, processo);
+    processo = inicializa_processo(*processo, self->cont_processos, prog_end_carga(prog), prog_tamanho(prog));
+    if(processo != NULL){
+      int ind_proc = encontra_indice_processo(self->processos, *processo);
+      if(ind_proc != -1){
+        self->processos[ind_proc] = *processo;       /*guarda dados do processo criado no SO*/
+        self->cont_processos++;     /*contém a quantidade de processos*/
+        (*processo).erro = 0;
+      }
+      else (*processo).erro = 1;
+    }
+    else{
+      //cpu_interrompe(self->cpu, IRQ_ERR_CPU);
+      (*processo).erro = 1;
+    }
     prog_destroi(prog);
-    self->processos[self->cont_processos] = processo;       /*guarda dados do processo criado no SO*/
-    self->cont_processos++;     /*contém a quantidade de processos*/
-    if (processo.PC > 0) {
-      // t2: deveria escrever no PC do descritor do processo criado
-      //self->regPC = ender_carga;
-      /*if((indice_proc = encontra_indice_processo(self->processos, processo)) != -1)
-        self->processos[indice_proc].PC = ender_carga;*/
-
-      return;
-    } // else?
   }
   // deveria escrever -1 (se erro) ou o PID do processo criado (se OK) no reg A
   //   do processo que pediu a criação
-  if(ERR_OK){
-    self->processo_corrente->A = processo.id;
-  }
-  else
+  if((*processo).erro){
     self->processo_corrente->A = -1;
+  }
+  else{
+    self->processo_corrente->A = (*processo).id;
+  }
 }
 
 // implementação da chamada se sistema SO_MATA_PROC
