@@ -36,7 +36,6 @@ typedef struct lista_processos Lista_processos;
 processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam);
 int encontra_indice_processo(processo_t processos[MAX_PROCESSOS], int id);
 
-Lista_processos* lst_cria (void);
 void lst_libera(Lista_processos* l);
 void lst_imprime (Lista_processos* l);
 Lista_processos* lst_altera_estado(Lista_processos* l, int id, estado_proc estado);

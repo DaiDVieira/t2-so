@@ -67,6 +67,11 @@ so_t *so_cria(cpu_t *cpu, mem_t *mem, es_t *es, console_t *console)
   self->console = console;
   self->erro_interno = false;
   self->cont_processos = 0;
+  self->ini_fila_proc = NULL;
+  self->processo_corrente = NULL;
+  for(int i = 0; i < MAX_PROCESSOS; i++){
+    self->processos[i].estado = morto;
+  }
 
   // quando a CPU executar uma instrução CHAMAC, deve chamar a função
   //   so_trata_interrupcao, com primeiro argumento um ptr para o SO
@@ -261,13 +266,22 @@ static void so_trata_reset(so_t *self)
   //   deste código
   // coloca o programa init na memória
   programa_t *proginit = so_carrega_programa(self, "init.maq");
-  processo_t *init = inicializa_processo(init, 0, prog_end_carga(proginit), prog_tamanho(proginit));
+  //processo_t *init = inicializa_processo(init, 0, prog_end_carga(proginit), prog_tamanho(proginit), pronto);
+  processo_t *init = so_cria_entrada_processo(self, prog_end_carga(proginit), prog_tamanho(proginit));
   prog_destroi(proginit);
 
-  self->cont_processos = 0;
-  self->processos[self->cont_processos] = *init;       /*guarda dados do processo criado no SO*/
-  self->processo_corrente = &self->processos[self->cont_processos];
-  self->cont_processos++;     /*a quantidade de processos vira 1*/
+  //coloca init na fila de processos
+  if (init != NULL) {
+      self->processo_corrente = init;
+      init->estado = pronto;
+      so_coloca_fila(self, init);
+  }
+
+  //self->cont_processos = 0; //ja inicializado em so_cria
+  //self->processos[self->cont_processos] = *init;       /*guarda dados do processo criado no SO*/
+  //self->processo_corrente = &self->processos[self->cont_processos];
+  //self->processo_corrente = init;
+  //self->cont_processos++;     /*a quantidade de processos vira 1*/
 
   // altera o PC para o endereço de carga
   //self->regPC = ender; // deveria ser no processo 
@@ -585,3 +599,33 @@ static bool copia_str_da_mem(int tam, char str[tam], mem_t *mem, int ender)
   return false;
 }
 // vim: foldmethod=marker
+
+float so_calcula_prioridade(processo_t* processo){
+  return 1.0;
+}
+
+void so_coloca_fila(so_t* self, processo_t* processo){
+  float prioridade = so_calcula_prioridade(processo);
+  self->ini_fila_proc = lst_insere_ordenado(self->ini_fila_proc, processo->id, prioridade, pronto);
+}
+
+int so_busca_entrada_tabela(so_t* self){
+  for(int i = 0; i < MAX_PROCESSOS; i++){
+    if(self->processos[i].estado == morto){
+      return i;
+    }
+  }
+  return -1; //tabela cheia
+}
+
+processo_t* so_cria_entrada_processo(so_t* self, int PC, int tam) {
+    int i = so_busca_entrada_tabela(self);
+    if (i == -1) {
+        console_printf("SO: tabela de processos cheia");
+        return NULL;
+    }
+    int id = self->cont_processos++;
+    inicializa_processo(&self->processos[i], id, PC, tam);
+    self->processos[i].estado = pronto;
+    return &self->processos[i];
+}

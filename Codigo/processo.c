@@ -11,6 +11,7 @@ processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam){
         self->processos[indice_proc].PC = ender_carga;*/
         return NULL;
     } // else?
+
     processo->id = id;
     processo->PC = PC;
     processo->erro = 0;
@@ -21,8 +22,7 @@ processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam){
     processo->memTam = tam;
     processo->t_cpu = 0;
     processo->n_exec = 0;
-    processo->estado = pronto;
-    processo->prio = 0;
+    processo->prio = 0.0;
     processo->id_terminal = 0;
     return processo;
 }
@@ -35,21 +35,9 @@ int encontra_indice_processo(processo_t processos[MAX_PROCESSOS], int id){
     return -1;
 }
 
-
-/*processo_t *inicializa_processos(processo_t processos[MAX_PROCESSOS]){
-    for(int i = 1; i <= MAX_PROCESSOS; i++){
-        inicializa_processo(processos[i], i);
-    }
-    return processos;
-}*/
-
 // ---------------------------------------------------------------------
 // LISTA DE PROCESSOS
 // ---------------------------------------------------------------------
-
-Lista_processos* lst_cria (void){
-    return NULL;
-}
 
 void lst_libera(Lista_processos* l){
     Lista_processos* p = l;
@@ -126,14 +114,4 @@ Lista_processos* lst_retira (Lista_processos* l, int id)
     }
     free(p);
     return l;
-}
-
-void lst_atualiza_prioridades(Lista_processos *l) {
-    /*
-    Lista_processos *p = l;
-    while (p != NULL) {
-        if (p->estado == pronto)
-            p->prio *= 0.9;
-        p = p->prox;
-        */
 }
