@@ -8,6 +8,8 @@
 
 typedef struct so_t so_t;
 
+typedef struct fila_processo Fila_processo;
+
 #include "memoria.h"
 #include "cpu.h"
 #include "es.h"

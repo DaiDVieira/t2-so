@@ -38,9 +38,9 @@ struct so_t {
   // t2: tabela de processos, processo corrente, pendências, etc
   processo_t processos[MAX_PROCESSOS];
   processo_t *processo_corrente;
+  Lista_processos* ini_fila_proc;
   int cont_processos; 
 };
-
 
 // função de tratamento de interrupção (entrada no SO)
 static int so_trata_interrupcao(void *argC, int reg_A);
@@ -261,7 +261,7 @@ static void so_trata_reset(so_t *self)
   //   deste código
   // coloca o programa init na memória
   programa_t *proginit = so_carrega_programa(self, "init.maq");
-  processo_t *init = inicializa_processo(*init, 0, prog_end_carga(proginit), prog_tamanho(proginit));
+  processo_t *init = inicializa_processo(init, 0, prog_end_carga(proginit), prog_tamanho(proginit));
   prog_destroi(proginit);
 
   self->cont_processos = 0;
@@ -460,9 +460,9 @@ static void so_chamada_cria_proc(so_t *self)
   char nome[100];
   if (copia_str_da_mem(100, nome, self->mem, ender_proc)) {
     programa_t *prog = so_carrega_programa(self, nome, processo);
-    processo = inicializa_processo(*processo, self->cont_processos, prog_end_carga(prog), prog_tamanho(prog));
+    processo = inicializa_processo(processo, self->cont_processos, prog_end_carga(prog), prog_tamanho(prog));
     if(processo != NULL){
-      int ind_proc = encontra_indice_processo(self->processos, *processo);
+      int ind_proc = encontra_indice_processo(self->processos, processo->id);
       if(ind_proc != -1){
         self->processos[ind_proc] = *processo;       /*guarda dados do processo criado no SO*/
         self->cont_processos++;     /*contém a quantidade de processos*/
@@ -488,12 +488,33 @@ static void so_chamada_cria_proc(so_t *self)
 
 // implementação da chamada se sistema SO_MATA_PROC
 // mata o processo com pid X (ou o processo corrente se X é 0)
-static void so_chamada_mata_proc(so_t *self)
+static void so_chamada_mata_proc(so_t *self, processo_t* processo)
 {
   // t2: deveria matar um processo
   // ainda sem suporte a processos, retorna erro -1
-  console_printf("SO: SO_MATA_PROC não implementada");
-  self->regA = -1;
+  //console_printf("SO: SO_MATA_PROC não implementada");
+  //self->regA = -1;
+
+  int id_proc_a_matar = processo->id;
+
+  int indice = encontra_indice_processo(self->processos, processo->id);
+  //nao encontrou processo com esse id
+  if(indice == -1){
+    console_printf("SO: processo de id %d nao encontrado para SO_MATA_PROC", id_proc_a_matar);
+    self->regA = -1;
+  }
+
+  self->processos[indice].estado = morto;
+
+  self->ini_fila_proc = lst_altera_estado(self->ini_fila_proc, id_proc_a_matar, morto);
+  self->ini_fila_proc = lst_retira(self->ini_fila_proc, id_proc_a_matar);
+
+  //se eh o processo corrente
+  if(self->processo_corrente && self->processo_corrente->id == id_proc_a_matar){
+    self->processo_corrente = NULL;
+    so_escalona(self);
+  }
+  self->regA = 0; //tudo ok
 }
 
 // implementação da chamada se sistema SO_ESPERA_PROC
@@ -563,5 +584,4 @@ static bool copia_str_da_mem(int tam, char str[tam], mem_t *mem, int ender)
   // estourou o tamanho de str
   return false;
 }
-
 // vim: foldmethod=marker
