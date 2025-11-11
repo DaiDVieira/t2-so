@@ -159,6 +159,9 @@ static void so_trata_pendencias(so_t *self)
   // - etc
 }
 
+//funcao auxiliar temporaria para escalonamento
+processo_t* so_proximo_pronto(so_t* self);
+
 static void so_escalona(so_t *self)
 {
   // escolhe o próximo processo a executar, que passa a ser o processo
@@ -166,6 +169,10 @@ static void so_escalona(so_t *self)
   // t2: na primeira versão, escolhe um processo pronto caso o processo
   //   corrente não possa continuar executando, senão deixa o mesmo processo.
   //   depois, implementa um escalonador melhor
+  if(self->processo_corrente ==  NULL || self->processo_corrente->estado != pronto){
+    processo_t* prox_processo = so_proximo_pronto(self);
+      self->processo_corrente = prox_processo; //pode ser NULL
+  }
 }
 
 static int so_despacha(so_t *self)  /*Feito*/
@@ -183,7 +190,11 @@ static int so_despacha(so_t *self)  /*Feito*/
       || mem_escreve(self->mem, 59, self->processo_corrente->X) != ERR_OK) {
       console_printf("SO: erro na escrita dos registradores do processo %d.", self->processo_corrente->id);
       self->erro_interno = true;
+      return 1;
     }
+
+    self->processo_corrente->estado = executando; //estava pronto
+    return 0;
   }
   else{
     return 1;
@@ -628,4 +639,16 @@ processo_t* so_cria_entrada_processo(so_t* self, int PC, int tam) {
     inicializa_processo(&self->processos[i], id, PC, tam);
     self->processos[i].estado = pronto;
     return &self->processos[i];
+}
+
+processo_t* so_proximo_pronto(so_t* self){
+  Lista_processos* l = self->ini_fila_proc;
+  while(l != NULL){
+    if(l->estado == pronto){
+      int indice = encontra_indice_processo(self->processos, l->id);
+      return &self->processos[indice];
+    }
+    l = l->prox;
+  }
+  return NULL; //nao ha processos prontos
 }
