@@ -35,6 +35,13 @@ int encontra_indice_processo(processo_t processos[MAX_PROCESSOS], int id){
     return -1;
 }
 
+void altera_estado_proc_tabela(processo_t processos[MAX_PROCESSOS], int id, estado_proc estado){
+    int indice = encontra_indice_processo(processos, id);
+    if(indice != -1){
+        processos[indice].estado = estado;
+    }
+}
+
 // ---------------------------------------------------------------------
 // LISTA DE PROCESSOS
 // ---------------------------------------------------------------------
@@ -69,7 +76,7 @@ Lista_processos* lst_altera_estado(Lista_processos* l, int id, estado_proc estad
     return l; //id invalido, lista inalterada
 }
 
-Lista_processos* lst_insere_ordenado (Lista_processos* l, int id, float prio, estado_proc estado){
+Lista_processos* lst_insere_ordenado (Lista_processos* l, int id, float prio){
     Lista_processos* novo;
     Lista_processos* ant = NULL; /* ponteiro para elemento anterior */
     Lista_processos* p = l; /* ponteiro para percorrer a lista */
@@ -82,7 +89,7 @@ Lista_processos* lst_insere_ordenado (Lista_processos* l, int id, float prio, es
     novo = (Lista_processos*)malloc(sizeof(Lista_processos));
     novo->id = id;
     novo->prio = prio;
-    novo->estado = estado;
+    novo->estado = pronto;
     /* encadeia elemento */
     if (ant == NULL){
         novo->prox = l; 

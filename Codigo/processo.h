@@ -35,11 +35,12 @@ typedef struct lista_processos Lista_processos;
 //processo_t *inicializa_processos(processo_t processos[MAX_PROCESSOS]);
 processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam);
 int encontra_indice_processo(processo_t processos[MAX_PROCESSOS], int id);
+void altera_estado_proc_tabela(processo_t processos[MAX_PROCESSOS], int id, estado_proc estado);
 
 void lst_libera(Lista_processos* l);
 void lst_imprime (Lista_processos* l);
 Lista_processos* lst_altera_estado(Lista_processos* l, int id, estado_proc estado);
-Lista_processos* lst_insere_ordenado (Lista_processos* l, int id, float prio, estado_proc estado);
+Lista_processos* lst_insere_ordenado (Lista_processos* l, int id, float prio);
 Lista_processos* lst_retira (Lista_processos* l, int id);
 void lst_atualiza_prioridades(Lista_processos *l);
 

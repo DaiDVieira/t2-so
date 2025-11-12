@@ -281,7 +281,7 @@ static void so_trata_reset(so_t *self)
   processo_t *init = so_cria_entrada_processo(self, prog_end_carga(proginit), prog_tamanho(proginit));
   prog_destroi(proginit);
 
-  //coloca init na fila de processos
+  //atualiza processo corrente e coloca init na fila de processos
   if (init != NULL) {
       self->processo_corrente = init;
       init->estado = pronto;
@@ -484,7 +484,8 @@ static void so_chamada_cria_proc(so_t *self)
 
   char nome[100];
   if (copia_str_da_mem(100, nome, self->mem, ender_proc)) {
-    programa_t *prog = so_carrega_programa(self, nome, processo);
+    //programa_t *prog = so_carrega_programa(self, nome, processo);
+    programa_t *prog = so_carrega_programa(self, nome);
     processo = inicializa_processo(processo, self->cont_processos, prog_end_carga(prog), prog_tamanho(prog));
     if(processo != NULL){
       int ind_proc = encontra_indice_processo(self->processos, processo->id);
@@ -513,16 +514,16 @@ static void so_chamada_cria_proc(so_t *self)
 
 // implementação da chamada se sistema SO_MATA_PROC
 // mata o processo com pid X (ou o processo corrente se X é 0)
-static void so_chamada_mata_proc(so_t *self, processo_t* processo)
+static void so_chamada_mata_proc(so_t *self)
 {
   // t2: deveria matar um processo
   // ainda sem suporte a processos, retorna erro -1
   //console_printf("SO: SO_MATA_PROC não implementada");
   //self->regA = -1;
 
-  int id_proc_a_matar = processo->id;
+  int id_proc_a_matar = self->processo_corrente->id;
 
-  int indice = encontra_indice_processo(self->processos, processo->id);
+  int indice = encontra_indice_processo(self->processos, id_proc_a_matar);
   //nao encontrou processo com esse id
   if(indice == -1){
     console_printf("SO: processo de id %d nao encontrado para SO_MATA_PROC", id_proc_a_matar);
@@ -533,6 +534,7 @@ static void so_chamada_mata_proc(so_t *self, processo_t* processo)
 
   self->ini_fila_proc = lst_altera_estado(self->ini_fila_proc, id_proc_a_matar, morto);
   self->ini_fila_proc = lst_retira(self->ini_fila_proc, id_proc_a_matar);
+  altera_estado_proc_tabela(self->processos, id_proc_a_matar, morto);
 
   //se eh o processo corrente
   if(self->processo_corrente && self->processo_corrente->id == id_proc_a_matar){
@@ -617,7 +619,7 @@ float so_calcula_prioridade(processo_t* processo){
 
 void so_coloca_fila(so_t* self, processo_t* processo){
   float prioridade = so_calcula_prioridade(processo);
-  self->ini_fila_proc = lst_insere_ordenado(self->ini_fila_proc, processo->id, prioridade, pronto);
+  self->ini_fila_proc = lst_insere_ordenado(self->ini_fila_proc, processo->id, prioridade);
 }
 
 int so_busca_entrada_tabela(so_t* self){
