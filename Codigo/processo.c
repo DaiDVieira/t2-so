@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "processo.h"
-#include "so.h"
 
-processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam){
+processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam, int ind){
     if (PC < 0) {
       // t2: deveria escrever no PC do descritor do processo criado
       //self->regPC = ender_carga;
@@ -14,8 +13,8 @@ processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam){
 
     processo->id = id;
     processo->PC = PC;
-    processo->erro = 0;
-    processo->regErro = ERR_OK;
+    processo->regErro = 0;
+    processo->erro = ERR_OK;
     processo->A = 0;
     processo->X = 0;
     processo->memIni = PC;
@@ -23,8 +22,18 @@ processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam){
     processo->t_cpu = 0;
     processo->n_exec = 0;
     processo->prio = 0.0;
-    processo->id_terminal = 0;
+    processo->id_terminal = id % 4 * 4;     //0-3, 4-7, 8-11, 12-15
+    processo->espera_terminal = 0;     //Sem espera = 0, Le = 1, Escreve = 2
     return processo;
+}
+
+int entrada_livre_tabela_proc(processo_t processos[MAX_PROCESSOS]){
+    for(int i = 0; i < MAX_PROCESSOS; i++){
+        if(processos[i].estado == morto){
+            return i;
+        }
+    }
+    return -1;
 }
 
 int encontra_indice_processo(processo_t processos[MAX_PROCESSOS], int id){
@@ -55,13 +64,13 @@ void lst_libera(Lista_processos* l){
     }
 }
 
-void lst_imprime (Lista_processos* l){
+void lst_imprime(Lista_processos* l){
     Lista_processos* p;
     for (p = l; p != NULL; p = p->prox)
-        printf("pid = %d prio = %.2f estado = %d\n", p->id, p->prio, p->estado);
+        console_printf("pid = %d prio = %.2f estado = %d\n", p->id, p->prio, p->estado);
 }
 
-int lst_vazia (Lista_processos* l){
+int lst_vazia(Lista_processos* l){
     return (l == NULL);
 }
 
@@ -76,7 +85,7 @@ Lista_processos* lst_altera_estado(Lista_processos* l, int id, estado_proc estad
     return l; //id invalido, lista inalterada
 }
 
-Lista_processos* lst_insere_ordenado (Lista_processos* l, int id, float prio){
+Lista_processos* lst_insere_ordenado(Lista_processos* l, int id, float prio){
     Lista_processos* novo;
     Lista_processos* ant = NULL; /* ponteiro para elemento anterior */
     Lista_processos* p = l; /* ponteiro para percorrer a lista */
@@ -102,8 +111,7 @@ Lista_processos* lst_insere_ordenado (Lista_processos* l, int id, float prio){
     return l;
 }
 
-Lista_processos* lst_retira (Lista_processos* l, int id)
-{
+Lista_processos* lst_retira(Lista_processos* l, int id){
     Lista_processos* ant = NULL;
     Lista_processos* p = l;
     while (p != NULL){ 
@@ -121,4 +129,96 @@ Lista_processos* lst_retira (Lista_processos* l, int id)
     }
     free(p);
     return l;
+}
+
+// ---------------------------------------------------------------------
+// LISTA DE HISTORICO DE PROCESSOS
+// ---------------------------------------------------------------------
+
+Historico_processos* inicializa_historico_proc(Historico_processos* hist_proc, int id, int tempo){
+    hist_proc->id = id;
+    hist_proc->tempo_vida = tempo;
+    hist_proc->n_preempcoes = 0;
+    hist_proc->tempo_espera = 0;
+    for(int i = 0; i < TIPOS_IRQ; i++){
+        hist_proc->quant_irq[i] = 0;
+    }
+    for(int i = 0; i < TIPOS_ESTADOS; i++){
+        hist_proc->tempo_estado[i] = 0;
+        hist_proc->quant_estado[i] = 0;
+    }
+    hist_proc->prox = NULL;
+} 
+
+void hst_libera(Historico_processos* h){
+    Historico_processos* p = h;
+    while(p != NULL){
+        Historico_processos* t = p->prox;
+        free(p);
+        p = t;
+    }
+}
+
+void hst_imprime(Historico_processos* h){
+    Historico_processos* p;
+    for (p = h; p != NULL; p = p->prox)
+        console_printf("pid = %d tempo de vida = %.2f preempcoes = %d\n", p->id, p->tempo_vida, p->n_preempcoes);
+}
+
+int hst_vazia(Historico_processos* h){
+    return (h == NULL);
+}
+
+Historico_processos* hst_insere_ordenado (Historico_processos* h, int id, int tempo){
+    Historico_processos* novo;
+    Historico_processos* ant = NULL; /* ponteiro para elemento anterior */
+    Historico_processos* p = h; /* ponteiro para percorrer a lista */
+    /* procura posição de inserção */
+    while (p != NULL && p->id > id){ 
+        ant = p; 
+        p = p->prox; 
+    }
+    /* cria novo elemento */
+    novo = (Historico_processos*)malloc(sizeof(Historico_processos));
+    novo->id = id;
+    inicializa_historico_proc(h, id, tempo);
+    /* encadeia elemento */
+    if (ant == NULL){
+        novo->prox = h; 
+        h = novo; 
+    }
+    else {
+        novo->prox = ant->prox;
+        ant->prox = novo; 
+    }
+    return h;
+}
+
+Historico_processos* hst_retira(Historico_processos* h, int id){
+    Historico_processos* ant = NULL;
+    Historico_processos* p = h;
+    while (p != NULL){ 
+        if (p->id == id)
+            break;
+        ant = p;
+        p = p->prox; 
+    }
+    if (p == NULL)
+        return h;
+    if (ant == NULL){
+        h = p->prox; }
+    else { 
+        ant->prox = p->prox; 
+    }
+    free(p);
+    return h;
+}
+
+Historico_processos* hst_busca(Historico_processos* h, int id){
+    Historico_processos* p;
+    for (p = h; p != NULL; p = p->prox){
+        if(p->id == id)
+            return p;
+    }
+    return NULL;
 }

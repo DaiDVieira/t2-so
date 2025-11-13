@@ -77,4 +77,6 @@ void so_destroi(so_t *self);
 // retorna sem bloquear, com erro, se não existir processo com esse pid
 #define SO_ESPERA_PROC 9
 
+#define TIPOS_IRQ 6
+
 #endif // SO_H
