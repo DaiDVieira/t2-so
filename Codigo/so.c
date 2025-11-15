@@ -46,7 +46,7 @@ struct so_t {
   int tempo_total_execucao;
   int tempo_ocioso_total;
   int momento_sist_ocioso;   /*Tempo que o sistema atualmente esta ocioso, antes de somar no total*/
-  int n_preempcoes;      /*Numero total de escalonamentos*/
+  int n_preempcoes;      /*Numero total de vencimentos do quantum*/
   int quant_irq[TIPOS_IRQ+1];   /*Considerando a Interrupção Desconhecida*/
 };
 
@@ -184,10 +184,13 @@ static void so_trata_pendencias(so_t *self)
       self->dispositivos_livres[self->processo_corrente->id_terminal/4] = true;
   /*E/S pendente*/
   processo_t* processo_pendente;
+  console_printf("antes while processo pendente");
   while((processo_pendente = so_proximo_pendente(self)) != NULL){   /*Enquanto tiver processos pendentes*/
+    console_printf("depois while processo pendente");
     if(processo_pendente->espera_terminal == 1){ 
       int teclado_ok = processo_pendente->id_terminal + TERM_TECLADO_OK;
-      if(es_le(self->es, teclado_ok, &self->regA) == ERR_OK && self->dispositivos_livres[processo_pendente->id_terminal]){
+      console_printf("verifica espera_terminal=1");
+      if((es_le(self->es, teclado_ok, &self->regA)) == ERR_OK && self->dispositivos_livres[processo_pendente->id_terminal]){
         processo_pendente->estado = pronto;
       }
       else{
@@ -195,8 +198,9 @@ static void so_trata_pendencias(so_t *self)
       }
     }
     else if(processo_pendente->espera_terminal == 2){
-    int tela_ok = processo_pendente->id_terminal + TERM_TELA_OK;
-      if(es_le(self->es, tela_ok, &self->regA) == ERR_OK && self->dispositivos_livres[processo_pendente->id_terminal]){
+      int tela_ok = processo_pendente->id_terminal + TERM_TELA_OK;
+      console_printf("verifica espera_terminal=2");
+      if((es_le(self->es, tela_ok, &self->regA)) == ERR_OK && self->dispositivos_livres[processo_pendente->id_terminal]){
         processo_pendente->estado = pronto;
       }
       else{
@@ -228,19 +232,24 @@ static void so_escalona(so_t *self)
   // t2: na primeira versão, escolhe um processo pronto caso o processo
   //   corrente não possa continuar executando, senão deixa o mesmo processo.
   //   depois, implementa um escalonador melhor
+  console_printf("so_escalona");
   if(self->processo_corrente ==  NULL || self->processo_corrente->estado != pronto){
     processo_t* prox_processo = so_proximo_pronto(self);
+    if(prox_processo != NULL)
+      console_printf("prox_proc_id %d", prox_processo->id);
+    else
+      console_printf("prox_proc eh nulo");
     if(prox_processo != NULL && prox_processo->espera_terminal != 0){
-      self->dispositivos_livres[self->processo_corrente->id_terminal/4] = false;
+      self->dispositivos_livres[prox_processo->id_terminal/4] = false;
       prox_processo->espera_terminal = 0;
     }
     self->processo_corrente = prox_processo; //pode ser NULL
   }
+
   /*Calculo do tempo ocioso*/
   so_calcula_tempo_ocioso(self);
+  console_printf("id proc_corrente %d ", self->processo_corrente->id);
 }
-
-
 
 static int so_despacha(so_t *self)  /*Feito*/
 {
@@ -250,6 +259,7 @@ static int so_despacha(so_t *self)  /*Feito*/
   // o valor retornado será o valor de retorno de CHAMAC, e será colocado no 
   //   registrador A para o tratador de interrupção (ver trata_irq.asm).
 
+  console_printf("inicio so_despacha ");
   if(self->processo_corrente != NULL){
     if(mem_escreve(self->mem, CPU_END_A, self->processo_corrente->A) != ERR_OK
       || mem_escreve(self->mem, CPU_END_PC, self->processo_corrente->PC) != ERR_OK
@@ -259,16 +269,15 @@ static int so_despacha(so_t *self)  /*Feito*/
       self->erro_interno = true;
       return 1;
     }
-
-    //self->processo_corrente->estado = executando; //estava pronto
+    console_printf("valor de A proc_corrente %d ", self->processo_corrente->A);
     return 0;
   }
   else{
     return 1;
   }
 
-  if (self->erro_interno) return 1;
-  else return 0;
+  //if (self->erro_interno) return 1;
+  //else return 0;
 }
 
 
@@ -286,7 +295,11 @@ static void so_trata_irq_desconhecida(so_t *self, int irq);
 static void so_trata_irq(so_t *self, int irq)
 {
   // verifica o tipo de interrupção que está acontecendo, e atende de acordo
-  Historico_processos *h = hst_busca(self->ini_hist_proc, self->processo_corrente->id);
+  console_printf("inicio trata_irq");
+  Historico_processos* h;
+  if(self->processo_corrente != NULL){
+    h = hst_busca(self->ini_hist_proc, self->processo_corrente->id);
+  }
   switch (irq) {
     case IRQ_RESET:
       so_trata_reset(self);
@@ -312,7 +325,11 @@ static void so_trata_irq(so_t *self, int irq)
       so_trata_irq_desconhecida(self, irq);
       self->quant_irq[TIPOS_IRQ]++;
   }
+  console_printf("fim trata_irq");
 }
+
+processo_t* so_cria_entrada_processo(so_t* self, int PC, int tam);
+void so_coloca_fila(so_t* self, processo_t* processo);
 
 // chamada uma única vez, quando a CPU inicializa
 static void so_trata_reset(so_t *self)
@@ -354,6 +371,7 @@ static void so_trata_reset(so_t *self)
   //   deste código
   // coloca o programa init na memória
   programa_t *proginit = so_carrega_programa(self, "init.maq");
+  console_printf("endereco carga init %d", prog_end_carga(proginit));
   //processo_t *init = inicializa_processo(init, 0, prog_end_carga(proginit), prog_tamanho(proginit), pronto);
   processo_t *init = so_cria_entrada_processo(self, prog_end_carga(proginit), prog_tamanho(proginit));
   prog_destroi(proginit);
@@ -367,7 +385,7 @@ static void so_trata_reset(so_t *self)
 
   int tempo;
   es_le(self->es, D_RELOGIO_REAL, &tempo);
-  hst_insere_ordenado(self->ini_hist_proc, init->id, tempo);
+  self->ini_hist_proc = hst_insere_ordenado(self->ini_hist_proc, init->id, tempo);
 
   self->cont_processos++;     /*a quantidade de processos vira 1*/
 
@@ -444,7 +462,12 @@ static void so_trata_irq_chamada_sistema(so_t *self)
   int id_chamada = self->processo_corrente->A;
   console_printf("SO: chamada de sistema %d", id_chamada);
 
-  Historico_processos *h = hst_busca(self->ini_hist_proc, self->processo_corrente->id);
+  Historico_processos *h = NULL;
+  if(self->processo_corrente != NULL){
+    h = hst_busca(self->ini_hist_proc, self->processo_corrente->id);
+  }
+  else
+    return;
 
   switch (id_chamada) {
     case SO_LE:
@@ -489,7 +512,7 @@ static void so_chamada_le(so_t *self)
   //   t2: deveria usar dispositivo de entrada corrente do processo
   //for (;;) {  // espera ocupada!
   int estado;
-  if ((es_le(self->es, self->processo_corrente->id_terminal + TERM_TECLADO_OK, &estado) != ERR_OK)) {
+  if (es_le(self->es, self->processo_corrente->id_terminal + TERM_TECLADO_OK, &estado) != ERR_OK) {
     console_printf("SO: problema no acesso ao estado do teclado");
     self->erro_interno = true;
     self->processo_corrente->espera_terminal = 1;
@@ -537,7 +560,8 @@ static void so_chamada_escr(so_t *self)
   //   t2: deveria usar o dispositivo de saída corrente do processo
   //for (;;) {
   int estado;
-  if ((es_le(self->es, self->processo_corrente->id_terminal + TERM_TELA_OK, &estado) != ERR_OK)) {
+  console_printf("id terminal %d end %d", self->processo_corrente->id_terminal + TERM_TELA_OK, &estado);
+  if ((es_le(self->es, self->processo_corrente->id_terminal + TERM_TELA_OK, &estado)) != ERR_OK) {
     console_printf("SO: problema no acesso ao estado da tela");
     self->erro_interno = true;
     self->processo_corrente->espera_terminal = 2;
@@ -559,7 +583,7 @@ static void so_chamada_escr(so_t *self)
   //   do SO, quando ele verificar que esse acesso já pode ser feito.
   //dado = self->regX;
   dado = self->processo_corrente->X;
-  if (es_escreve(self->es,  self->processo_corrente->id_terminal + TERM_TELA, dado) != ERR_OK) {
+  if ((es_escreve(self->es,  self->processo_corrente->id_terminal + TERM_TELA, dado)) != ERR_OK) {
     console_printf("SO: problema no acesso à tela");
     self->erro_interno = true;
     self->processo_corrente->espera_terminal = 2;
@@ -580,7 +604,7 @@ static void so_chamada_cria_proc(so_t *self)
   // em X está o endereço onde está o nome do arquivo
   // t2: deveria ler o X do descritor do processo criador
   //ender_proc = self->regX;
-  int ender_proc, indice_proc;
+  int ender_proc;
   ender_proc = self->processo_corrente->X;
   processo_t *processo;
 
@@ -617,7 +641,7 @@ static void so_chamada_cria_proc(so_t *self)
 
   int tempo;
   es_le(self->es, D_RELOGIO_REAL, &tempo);
-  hst_insere_ordenado(self->ini_hist_proc, processo->id, tempo);
+  self->ini_hist_proc = hst_insere_ordenado(self->ini_hist_proc, processo->id, tempo);
 }
 
 // implementação da chamada se sistema SO_MATA_PROC
@@ -646,7 +670,6 @@ static void so_chamada_mata_proc(so_t *self)
   if(self->processo_corrente != NULL && self->processo_corrente->id == id_proc_a_matar){
     self->dispositivos_livres[self->processo_corrente->id_terminal/4] = true;    //libera
     self->processo_corrente = NULL;
-    so_escalona(self);
   }
   self->regA = 0; //tudo ok
 
@@ -723,7 +746,7 @@ static bool copia_str_da_mem(int tam, char str[tam], mem_t *mem, int ender)
 // vim: foldmethod=marker
 
 float so_calcula_prioridade(processo_t* processo){
-  return 1.0;
+  return 0.5;
 }
 
 void so_coloca_fila(so_t* self, processo_t* processo){
@@ -749,6 +772,10 @@ processo_t* so_cria_entrada_processo(so_t* self, int PC, int tam) {
     int id = self->cont_processos++;
     inicializa_processo(&self->processos[i], id, PC, tam);
     self->processos[i].estado = pronto;
+    if(self->processos[i].id == 0)
+      console_printf("id eh 0");
+    else
+      console_printf("id diferente de zero");
     return &self->processos[i];
 }
 

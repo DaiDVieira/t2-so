@@ -4,7 +4,7 @@
 #include "so.h"
 
 #define INI_MEM_PROC 100
-#define MAX_PROCESSOS 3 //número máximo de processos
+#define MAX_PROCESSOS 4 //número máximo de processos
 
 typedef enum { bloqueado, pronto, morto } estado_proc;
 
@@ -44,7 +44,7 @@ struct historico_processos {
     int quant_irq[TIPOS_IRQ];
     int tempo_estado[TIPOS_ESTADOS];
     int quant_estado[TIPOS_ESTADOS];
-    struct lista_processos* prox;
+    struct historico_processos* prox;
 };
 typedef struct historico_processos Historico_processos;
 
@@ -63,7 +63,7 @@ Lista_processos* lst_insere_ordenado (Lista_processos* l, int id, float prio);
 Lista_processos* lst_retira (Lista_processos* l, int id);
 void lst_atualiza_prioridades(Lista_processos *l);
 
-Historico_processos* inicializa_historico_proc(Historico_processos* hist_proc, int id, int tempo);
+Historico_processos* inicializa_historico_proc(int id, int tempo);
 void hst_libera(Historico_processos* h);
 void hst_imprime(Historico_processos* h);
 int hst_vazia(Historico_processos* h);

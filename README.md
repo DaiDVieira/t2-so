@@ -51,7 +51,7 @@ Usaremos essa instrução para executar o SO, como se todo o sistema operacional
 Essa instrução é "CHAMAC", e deve-se configurar a CPU para dizer qual a função a chamar para executar essa instrução. Essa configuração está sendo executada na inicialização do SO (em `so.c`).
 
 Quando a CPU é inicializada, é colocada em modo supervisor, para executar no endereço 0.
-Esse endereço deve conter o código de inicialização.
+Esse endereço deve conter o código de inicialização.;
 Esse código está em `bios.asm`, e é colocado na memória na inicialização do simulador (em `main.c`.
 Esse código chama o SO, após carregar o registrador A com o valor 0, simulando uma interrupção.
 Quando o SO é chamado dessa forma, carrega um programa na memória (`init.asm`), que será o primeiro programa a ser inicializado. Deveria ser criado um processo para executar esse programa.

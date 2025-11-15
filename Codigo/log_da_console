@@ -1,4 +1,34 @@
-CMD: 'p'
-CMD: 'P'
-CMD: 'F'
-Fim da execução.
+CMD: '1'
+CMD: '1'
+SO: recebi IRQ 0 (Reset)
+inicio trata_irq
+SO: carga de 'trata_int.maq' em 60-72
+SO: carga de 'init.maq' em 100-270
+endereco carga init 100
+id eh 0
+fim trata_irq
+antes while processo pendente
+so_escalona
+id proc_corrente 0 
+inicio so_despacha 
+valor de A proc_corrente 0 
+CMD: '1'
+CMD: '1'
+CMD: '1'
+CMD: '1'
+CMD: '1'
+CMD: '1'
+CMD: '1'
+CMD: '1'
+CMD: '1'
+CMD: '1'
+CMD: '1'
+CMD: '1'
+inicio cpu_interrompe 
+CMD: '1'
+CMD: '1'
+CMD: '1'
+CMD: '1'
+SO: recebi IRQ 2 (Chamada de sistema)
+inicio trata_irq
+S

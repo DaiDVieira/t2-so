@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "processo.h"
 
-processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam, int ind){
+processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam){
     if (PC < 0) {
       // t2: deveria escrever no PC do descritor do processo criado
       //self->regPC = ender_carga;
@@ -25,15 +25,6 @@ processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam, i
     processo->id_terminal = id % 4 * 4;     //0-3, 4-7, 8-11, 12-15
     processo->espera_terminal = 0;     //Sem espera = 0, Le = 1, Escreve = 2
     return processo;
-}
-
-int entrada_livre_tabela_proc(processo_t processos[MAX_PROCESSOS]){
-    for(int i = 0; i < MAX_PROCESSOS; i++){
-        if(processos[i].estado == morto){
-            return i;
-        }
-    }
-    return -1;
 }
 
 int encontra_indice_processo(processo_t processos[MAX_PROCESSOS], int id){
@@ -135,19 +126,23 @@ Lista_processos* lst_retira(Lista_processos* l, int id){
 // LISTA DE HISTORICO DE PROCESSOS
 // ---------------------------------------------------------------------
 
-Historico_processos* inicializa_historico_proc(Historico_processos* hist_proc, int id, int tempo){
-    hist_proc->id = id;
-    hist_proc->tempo_vida = tempo;
-    hist_proc->n_preempcoes = 0;
-    hist_proc->tempo_espera = 0;
+Historico_processos* inicializa_historico_proc(int id, int tempo){
+    Historico_processos* novo = (Historico_processos*)malloc(sizeof(Historico_processos));
+    if(!novo) return NULL; 
+
+    novo->id = id;
+    novo->tempo_vida = tempo;
+    novo->n_preempcoes = 0;
+    novo->tempo_espera = 0;
     for(int i = 0; i < TIPOS_IRQ; i++){
-        hist_proc->quant_irq[i] = 0;
+        novo->quant_irq[i] = 0;
     }
     for(int i = 0; i < TIPOS_ESTADOS; i++){
-        hist_proc->tempo_estado[i] = 0;
-        hist_proc->quant_estado[i] = 0;
+        novo->tempo_estado[i] = 0;
+        novo->quant_estado[i] = 0;
     }
-    hist_proc->prox = NULL;
+    novo->prox = NULL;
+    return novo;
 } 
 
 void hst_libera(Historico_processos* h){
@@ -170,8 +165,7 @@ int hst_vazia(Historico_processos* h){
 }
 
 Historico_processos* hst_insere_ordenado (Historico_processos* h, int id, int tempo){
-    Historico_processos* novo;
-    Historico_processos* ant = NULL; /* ponteiro para elemento anterior */
+    Historico_processos* ant = NULL; 
     Historico_processos* p = h; /* ponteiro para percorrer a lista */
     /* procura posição de inserção */
     while (p != NULL && p->id > id){ 
@@ -179,9 +173,8 @@ Historico_processos* hst_insere_ordenado (Historico_processos* h, int id, int te
         p = p->prox; 
     }
     /* cria novo elemento */
-    novo = (Historico_processos*)malloc(sizeof(Historico_processos));
-    novo->id = id;
-    inicializa_historico_proc(h, id, tempo);
+    Historico_processos* novo = inicializa_historico_proc(id, tempo);
+    if(novo == NULL) return h; //retorna lista inalterada
     /* encadeia elemento */
     if (ant == NULL){
         novo->prox = h; 

@@ -19,6 +19,9 @@
 #include <assert.h>
 
 
+
+#include "console.h"
+
 // ---------------------------------------------------------------------
 // DECLARAÇÃO {{{1
 // ---------------------------------------------------------------------
@@ -525,6 +528,7 @@ bool cpu_interrompe(cpu_t *self, irq_t irq)
 {
   // só aceita interrupção em modo usuário ou quando a CPU está dormindo
   if (self->modo != usuario && self->erro != ERR_CPU_PARADA) return false;
+  console_printf("inicio cpu_interrompe ");
 
   // Copia o estado da CPU para variáveis locais, para ter certeza que nada será
   //   alterado por funções auxiliares (poe_mem altera o erro)
