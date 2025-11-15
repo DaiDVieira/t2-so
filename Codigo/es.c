@@ -5,6 +5,12 @@
 
 #include "es.h"
 
+
+
+
+#include "console.h"
+
+
 #include <stdlib.h>
 #include <assert.h>
 
@@ -51,6 +57,7 @@ bool es_registra_dispositivo(es_t *self, dispositivo_id_t dispositivo,
 
 err_t es_le(es_t *self, dispositivo_id_t dispositivo, int *pvalor)
 {
+  console_printf("(id_disp %d, dispositivo_id_t %d) ", self->dispositivos[dispositivo].id, dispositivo);
   if (dispositivo < 0 || dispositivo >= N_DISPOSITIVOS) return ERR_DISP_INV;
   if (self->dispositivos[dispositivo].f_leitura == NULL) return ERR_OP_INV;
   void *controladora = self->dispositivos[dispositivo].controladora;

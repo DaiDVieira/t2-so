@@ -1,12 +1,16 @@
+(id_disp 1, dispositivo_id_t 17) 
 CMD: '1'
 CMD: '1'
 SO: recebi IRQ 0 (Reset)
-inicio trata_irq
+(inicio trata_irq com irq 0)
 SO: carga de 'trata_int.maq' em 60-72
 SO: carga de 'init.maq' em 100-270
 endereco carga init 100
 id eh 0
-fim trata_irq
+(init id_terminal 0)
+(init id_terminal 0)
+(id_disp 1, dispositivo_id_t 17) 
+fim trata_irq com irq 0
 antes while processo pendente
 so_escalona
 id proc_corrente 0 
@@ -22,13 +26,4 @@ CMD: '1'
 CMD: '1'
 CMD: '1'
 CMD: '1'
-CMD: '1'
-CMD: '1'
-inicio cpu_interrompe 
-CMD: '1'
-CMD: '1'
-CMD: '1'
-CMD: '1'
-SO: recebi IRQ 2 (Chamada de sistema)
-inicio trata_irq
-S
+C

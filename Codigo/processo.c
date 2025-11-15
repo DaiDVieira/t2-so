@@ -22,7 +22,7 @@ processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam){
     processo->t_cpu = 0;
     processo->n_exec = 0;
     processo->prio = 0.0;
-    processo->id_terminal = id % 4 * 4;     //0-3, 4-7, 8-11, 12-15
+    processo->id_terminal = (id % 4) * 4;     //0-3, 4-7, 8-11, 12-15
     processo->espera_terminal = 0;     //Sem espera = 0, Le = 1, Escreve = 2
     return processo;
 }
