@@ -24,6 +24,7 @@ processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam){
     processo->prio = 0.0;
     processo->id_terminal = (id % 4) * 4;     //0-3, 4-7, 8-11, 12-15
     processo->espera_terminal = 0;     //Sem espera = 0, Le = 1, Escreve = 2
+    processo->quantum = QUANTUM_INICIAL;
     return processo;
 }
 
@@ -81,7 +82,7 @@ Lista_processos* lst_insere_ordenado(Lista_processos* l, int id, float prio){
     Lista_processos* ant = NULL; /* ponteiro para elemento anterior */
     Lista_processos* p = l; /* ponteiro para percorrer a lista */
     /* procura posição de inserção */
-    while (p != NULL && p->prio > prio){ 
+    while (p != NULL && p->prio >= prio){ 
         ant = p; 
         p = p->prox; 
     }
@@ -100,6 +101,24 @@ Lista_processos* lst_insere_ordenado(Lista_processos* l, int id, float prio){
         ant->prox = novo; 
     }
     return l;
+}
+
+Lista_processos* lst_adicionar_final(Lista_processos* l, int id, float prio){
+	Lista_processos* p = (Lista_processos*)malloc(sizeof(Lista_processos));
+	if(p == NULL){
+		printf("\nFalha ao alocar memoria\n");
+		return NULL;
+	}
+    else{
+        Lista_processos* aux = l;
+        while(aux->prox) 
+            aux = aux->prox;
+        p->id = id;
+        p->prio = prio;
+        p->prox = NULL;
+        aux->prox = p;
+    }
+	return l;
 }
 
 Lista_processos* lst_retira(Lista_processos* l, int id){
@@ -214,4 +233,10 @@ Historico_processos* hst_busca(Historico_processos* h, int id){
             return p;
     }
     return NULL;
+}
+
+Historico_processos* hst_atualiza_preempcoes(Historico_processos* h, int id){
+    Historico_processos* p = hst_busca(h, id);
+    p->n_preempcoes++;
+    return h;
 }

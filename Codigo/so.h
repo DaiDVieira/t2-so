@@ -18,6 +18,8 @@ typedef struct fila_processo Fila_processo;
 so_t *so_cria(cpu_t *cpu, mem_t *mem, es_t *es, console_t *console);
 void so_destroi(so_t *self);
 
+typedef enum { simples, round_robin, prioridade} escalonador_atual;
+
 // Chamadas de sistema
 // Uma chamada de sistema é realizada colocando a identificação da
 //   chamada (um dos valores abaixo) no registrador A e executando a
@@ -78,5 +80,7 @@ void so_destroi(so_t *self);
 #define SO_ESPERA_PROC 9
 
 #define TIPOS_IRQ 6
+
+#define QUANTUM_INICIAL 5
 
 #endif // SO_H

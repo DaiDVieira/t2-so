@@ -23,6 +23,7 @@ struct processo_t{
     float prio;
     int id_terminal;
     int espera_terminal;
+    int quantum;
 };
 typedef struct processo_t processo_t;
 
@@ -60,6 +61,7 @@ void lst_libera(Lista_processos* l);
 void lst_imprime (Lista_processos* l);
 Lista_processos* lst_altera_estado(Lista_processos* l, int id, estado_proc estado);
 Lista_processos* lst_insere_ordenado (Lista_processos* l, int id, float prio);
+Lista_processos* lst_adicionar_final(Lista_processos* l, int id, float prio);
 Lista_processos* lst_retira (Lista_processos* l, int id);
 void lst_atualiza_prioridades(Lista_processos *l);
 
@@ -70,5 +72,6 @@ int hst_vazia(Historico_processos* h);
 Historico_processos* hst_insere_ordenado (Historico_processos* h, int id, int tempo);
 Historico_processos* hst_retira (Historico_processos* h, int id);
 Historico_processos* hst_busca(Historico_processos* h, int id);
+Historico_processos* hst_atualiza_preempcoes(Historico_processos* h, int id);
 
 #endif

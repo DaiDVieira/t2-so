@@ -40,6 +40,7 @@ struct so_t {
   processo_t processos[MAX_PROCESSOS];
   processo_t *processo_corrente;
   Lista_processos* ini_fila_proc;
+  Lista_processos* ini_fila_proc_prontos;
   int cont_processos; 
   bool dispositivos_livres[TERMINAIS]; 
   Historico_processos* ini_hist_proc;
@@ -48,6 +49,7 @@ struct so_t {
   int momento_sist_ocioso;   /*Tempo que o sistema atualmente esta ocioso, antes de somar no total*/
   int n_preempcoes;      /*Numero total de vencimentos do quantum*/
   int quant_irq[TIPOS_IRQ+1];   /*Considerando a Interrupção Desconhecida*/
+  escalonador_atual escalonador;
 };
 
 // função de tratamento de interrupção (entrada no SO)
@@ -79,6 +81,7 @@ so_t *so_cria(cpu_t *cpu, mem_t *mem, es_t *es, console_t *console)
   self->ini_fila_proc = NULL;
   self->processo_corrente = NULL;
   self->ini_hist_proc = NULL;
+  self->ini_fila_proc_prontos = NULL;
   for(int i = 0; i < MAX_PROCESSOS; i++){
     self->processos[i].estado = morto;
   }
@@ -93,6 +96,7 @@ so_t *so_cria(cpu_t *cpu, mem_t *mem, es_t *es, console_t *console)
   for(int i = 0; i < TIPOS_IRQ+1; i++){
     self->quant_irq[i] = 0;
   }
+  self->escalonador = simples;
 
   // quando a CPU executar uma instrução CHAMAC, deve chamar a função
   //   so_trata_interrupcao, com primeiro argumento um ptr para o SO
@@ -193,6 +197,7 @@ static void so_trata_pendencias(so_t *self)
       console_printf("verifica espera_terminal=1");
       if((es_le(self->es, teclado_ok, &processo_pendente->A)) == ERR_OK && self->dispositivos_livres[processo_pendente->id_terminal / 4]){
         processo_pendente->estado = pronto;
+        self->ini_fila_proc_prontos = so_coloca_fila_pronto(self->ini_fila_proc, processo_pendente->id);
       }
       else{
         console_printf("SO: teclado nao disponivel"); /*retirar depois - depuracao*/
@@ -203,6 +208,7 @@ static void so_trata_pendencias(so_t *self)
       console_printf("verifica espera_terminal=2");
       if((es_le(self->es, tela_ok, &processo_pendente->A)) == ERR_OK && self->dispositivos_livres[processo_pendente->id_terminal / 4]){
         processo_pendente->estado = pronto;
+        self->ini_fila_proc_prontos = so_coloca_fila_pronto(self->ini_fila_proc, processo_pendente->id);
       }
       else{
         console_printf("SO: tela nao disponivel"); /*retirar depois - depuracao*/
@@ -210,13 +216,18 @@ static void so_trata_pendencias(so_t *self)
     }
     else{   //espera_terminal = 0, pode ser por esperar outro processo acabar
       /*Desbloqueio de processos bloqueados por espera*/
-      int ind = encontra_indice_processo(self->processos, processo_pendente->X);
-      if(ind == -1 || self->processos[ind].estado == morto){    //Se processo morto ou nao existe mais, entao pode parar de esperar
-        processo_pendente->estado = pronto;
-      }
+      so_chamada_espera_proc(self, processo_pendente);
     }
   }
 
+  /*bloqueia processos por tempo de cpu e reinicia o quantum*/
+  if(self->processo_corrente != NULL && self->processo_corrente->quantum == 0){
+    self->ini_fila_proc = lst_altera_estado(self->ini_fila_proc, self->processo_corrente->id, bloqueado);
+    altera_estado_proc_tabela(self->processos, self->processo_corrente->id, bloqueado);
+    self->ini_fila_proc_prontos = lst_retira(self->ini_fila_proc_prontos, self->processo_corrente->id);
+    self->processo_corrente->quantum = QUANTUM_INICIAL;
+    self->ini_hist_proc = hst_atualiza_preempcoes(self->ini_hist_proc, self->processo_corrente->id);
+  }
 
   /*Contabilidades - metricas: */
 
@@ -234,6 +245,15 @@ static void so_escalona(so_t *self)
   //   corrente não possa continuar executando, senão deixa o mesmo processo.
   //   depois, implementa um escalonador melhor
   console_printf("so_escalona");
+  if(self->processo_corrente != NULL && self->escalonador == prioridade){
+    if(self->processo_corrente->prio < self->ini_fila_proc_prontos->prio){
+      self->ini_hist_proc = hst_atualiza_preempcoes(self->ini_hist_proc, self->processo_corrente->id);
+      self->ini_fila_proc = lst_altera_estado(self->ini_fila_proc, self->processo_corrente->id, bloqueado);
+      self->ini_fila_proc_prontos = lst_retira(self->ini_fila_proc_prontos, self->processo_corrente->id); 
+      altera_estado_proc_tabela(self->processos, self->processo_corrente->id, bloqueado);
+    }
+  }
+
   if(self->processo_corrente ==  NULL || self->processo_corrente->estado != pronto){
     processo_t* prox_processo = so_proximo_pronto(self);
     if(prox_processo != NULL)
@@ -246,6 +266,7 @@ static void so_escalona(so_t *self)
     }
     self->processo_corrente = prox_processo; //pode ser NULL
   }
+  
 
   /*Calculo do tempo ocioso*/
   so_calcula_tempo_ocioso(self);
@@ -335,7 +356,7 @@ static void so_trata_irq(so_t *self, int irq)
 }
 
 processo_t* so_cria_entrada_processo(so_t* self, int PC, int tam);
-void so_coloca_fila(so_t* self, processo_t* processo);
+Lista_processos* so_coloca_fila_pronto(so_t* self, processo_t* processo);
 
 // chamada uma única vez, quando a CPU inicializa
 static void so_trata_reset(so_t *self)
@@ -387,7 +408,8 @@ static void so_trata_reset(so_t *self)
   if (init != NULL) {
       self->processo_corrente = init;
       init->estado = pronto;
-      so_coloca_fila(self, init);
+      self->ini_fila_proc_prontos = so_coloca_fila_pronto(self, init);
+      self->ini_fila_proc = lst_insere_ordenado(self->ini_fila_proc, init->id, init->prio);
   }
 
   console_printf("(init id_terminal %d)", self->processo_corrente->id_terminal);
@@ -432,6 +454,7 @@ static void so_trata_irq_relogio(so_t *self)
   err_t e1, e2;
   e1 = es_escreve(self->es, D_RELOGIO_INTERRUPCAO, 0); // desliga o sinalizador de interrupção
   e2 = es_escreve(self->es, D_RELOGIO_TIMER, INTERVALO_INTERRUPCAO);
+  
   if (e1 != ERR_OK || e2 != ERR_OK) {
     console_printf("SO: problema da reinicialização do timer");
     self->erro_interno = true;
@@ -439,7 +462,10 @@ static void so_trata_irq_relogio(so_t *self)
   // t2: deveria tratar a interrupção
   //   por exemplo, decrementa o quantum do processo corrente, quando se tem
   //   um escalonador com quantum
-  console_printf("SO: interrupção do relógio (não tratada)");
+  //console_printf("SO: interrupção do relógio (não tratada)");
+
+  if(self->escalonador != simples)
+    self->processo_corrente->quantum--; 
 }
 
 // foi gerada uma interrupção para a qual o SO não está preparado
@@ -459,7 +485,7 @@ static void so_chamada_le(so_t *self);
 static void so_chamada_escr(so_t *self);
 static void so_chamada_cria_proc(so_t *self);
 static void so_chamada_mata_proc(so_t *self);
-static void so_chamada_espera_proc(so_t *self);
+static void so_chamada_espera_proc(so_t *self, processo_t* processo_pendente);
 
 static void so_trata_irq_chamada_sistema(so_t *self)
 {
@@ -495,7 +521,7 @@ static void so_trata_irq_chamada_sistema(so_t *self)
       so_chamada_mata_proc(self);
       break;
     case SO_ESPERA_PROC:
-      so_chamada_espera_proc(self);
+      so_chamada_espera_proc(self, self->processo_corrente);
       break;
     default:
       console_printf("SO: chamada de sistema desconhecida (%d)", id_chamada);
@@ -524,7 +550,8 @@ static void so_chamada_le(so_t *self)
     console_printf("SO: problema no acesso ao estado do teclado");
     self->erro_interno = true;
     self->processo_corrente->espera_terminal = 1;
-    lst_altera_estado(self->ini_fila_proc, self->processo_corrente->id, bloqueado);
+    self->ini_fila_proc = lst_altera_estado(self->ini_fila_proc, self->processo_corrente->id, bloqueado);
+    self->ini_fila_proc_prontos = lst_retira(self->ini_fila_proc_prontos, self->processo_corrente->id); 
     altera_estado_proc_tabela(self->processos, self->processo_corrente->id, bloqueado);
     return;
   }
@@ -540,7 +567,8 @@ static void so_chamada_le(so_t *self)
     console_printf("SO: problema no acesso ao teclado");
     self->erro_interno = true;
     self->processo_corrente->espera_terminal = 1;
-    lst_altera_estado(self->ini_fila_proc, self->processo_corrente->id, bloqueado);
+    self->ini_fila_proc = lst_altera_estado(self->ini_fila_proc, self->processo_corrente->id, bloqueado);
+    self->ini_fila_proc_prontos = lst_retira(self->ini_fila_proc_prontos, self->processo_corrente->id); 
     altera_estado_proc_tabela(self->processos, self->processo_corrente->id, bloqueado);
     return;
   }
@@ -575,7 +603,8 @@ static void so_chamada_escr(so_t *self)
     console_printf("SO: problema no acesso ao estado da tela");
     self->erro_interno = true;
     self->processo_corrente->espera_terminal = 2;
-    lst_altera_estado(self->ini_fila_proc, self->processo_corrente->id, bloqueado);
+    self->ini_fila_proc = lst_altera_estado(self->ini_fila_proc, self->processo_corrente->id, bloqueado);
+    self->ini_fila_proc_prontos = lst_retira(self->ini_fila_proc_prontos, self->processo_corrente->id); 
     altera_estado_proc_tabela(self->processos, self->processo_corrente->id, bloqueado);
     return;
   }
@@ -597,7 +626,8 @@ static void so_chamada_escr(so_t *self)
     console_printf("SO: problema no acesso à tela");
     self->erro_interno = true;
     self->processo_corrente->espera_terminal = 2;
-    lst_altera_estado(self->ini_fila_proc, self->processo_corrente->id, bloqueado);
+    self->ini_fila_proc = lst_altera_estado(self->ini_fila_proc, self->processo_corrente->id, bloqueado);
+    self->ini_fila_proc_prontos = lst_retira(self->ini_fila_proc_prontos, self->processo_corrente->id); 
     altera_estado_proc_tabela(self->processos, self->processo_corrente->id, bloqueado);
     return;
   }
@@ -629,10 +659,15 @@ static void so_chamada_cria_proc(so_t *self)
       /*int ind_proc = encontra_indice_processo(self->processos, processo->id);
       if(ind_proc != -1){
         self->processos[ind_proc] = *processo;*/       /*guarda dados do processo criado no SO*/
-        self->cont_processos++;     /*contém a quantidade de processos*/
-        processo->erro = ERR_OK;
-        processo->regErro = 0;
+      self->cont_processos++;     /*contém a quantidade de processos*/
+      processo->erro = ERR_OK;
+      processo->regErro = 0;
       //} 
+      self->ini_fila_proc_prontos = so_coloca_fila_pronto(self, processo);
+      self->ini_fila_proc = lst_insere_ordenado(self->ini_fila_proc, processo->id, processo->prio);
+      int tempo;
+      es_le(self->es, D_RELOGIO_REAL, &tempo);
+      self->ini_hist_proc = hst_insere_ordenado(self->ini_hist_proc, processo->id, tempo);
     }
     else{
       //cpu_interrompe(self->cpu, IRQ_ERR_CPU);
@@ -649,10 +684,6 @@ static void so_chamada_cria_proc(so_t *self)
   else{
     self->processo_corrente->A = processo->id;
   }
-
-  int tempo;
-  es_le(self->es, D_RELOGIO_REAL, &tempo);
-  self->ini_hist_proc = hst_insere_ordenado(self->ini_hist_proc, processo->id, tempo);
 }
 
 // implementação da chamada se sistema SO_MATA_PROC
@@ -668,7 +699,12 @@ static void so_chamada_mata_proc(so_t *self)
   console_printf("so_mata_proc id proc_a_matar %d", id_proc_a_matar);
 
   int indice = encontra_indice_processo(self->processos, id_proc_a_matar);
-  //nao encontrou processo com esse id
+  Historico_processos* h = hst_busca(self->ini_hist_proc, id_proc_a_matar);
+  /*calcula tempo de vida do processo*/
+  int tempo;
+  es_le(self->es, D_RELOGIO_REAL, &tempo);
+  h->tempo_vida = tempo - h->tempo_vida;
+  /*nao encontrou processo com esse id*/
   if(indice == -1){
     console_printf("SO: processo de id %d nao encontrado para SO_MATA_PROC", id_proc_a_matar);
     //self->regA = -1;
@@ -677,27 +713,30 @@ static void so_chamada_mata_proc(so_t *self)
 
   self->ini_fila_proc = lst_altera_estado(self->ini_fila_proc, id_proc_a_matar, morto);
   self->ini_fila_proc = lst_retira(self->ini_fila_proc, id_proc_a_matar);
+  self->ini_fila_proc_prontos = lst_retira(self->ini_fila_proc_prontos, id_proc_a_matar);
   altera_estado_proc_tabela(self->processos, id_proc_a_matar, morto);
 
-  //se eh o processo corrente
-  if(self->processo_corrente != NULL && self->processo_corrente->id == id_proc_a_matar){
+  if(self->processo_corrente != NULL){
     self->dispositivos_livres[self->processo_corrente->id_terminal/4] = true;    //libera
     self->processo_corrente = NULL;
   }
-  //self->regA = 0; //tudo ok
-  self->processo_corrente->A = 0;
-
+  self->regA = 0; //tudo ok
 }
 
 // implementação da chamada se sistema SO_ESPERA_PROC
 // espera o fim do processo com pid X
-static void so_chamada_espera_proc(so_t *self)
+static void so_chamada_espera_proc(so_t *self, processo_t* processo_pendente)
 {
   // t2: deveria bloquear o processo se for o caso (e desbloquear na morte do esperado)
   // ainda sem suporte a processos, retorna erro -1
   /*console_printf("SO: SO_ESPERA_PROC não implementada");
   self->regA = -1;*/
-  self->processo_corrente->estado = bloqueado;
+  processo_pendente->estado = bloqueado;
+  int ind = encontra_indice_processo(self->processos, processo_pendente->X);
+  if(ind == -1 || self->processos[ind].estado == morto){    //Se processo morto ou nao existe mais, entao pode parar de esperar
+    processo_pendente->estado = pronto;
+    self->ini_fila_proc_prontos = so_coloca_fila_pronto(self->ini_fila_proc, processo_pendente->id);
+  }
 }
 
 
@@ -760,12 +799,28 @@ static bool copia_str_da_mem(int tam, char str[tam], mem_t *mem, int ender)
 // vim: foldmethod=marker
 
 float so_calcula_prioridade(processo_t* processo){
-  return 0.5;
+  int t_exec = QUANTUM_INICIAL - processo->quantum;
+  float prioridade = (processo->prio + t_exec/QUANTUM_INICIAL) / 2;
+  return prioridade;
 }
 
-void so_coloca_fila(so_t* self, processo_t* processo){
-  float prioridade = so_calcula_prioridade(processo);
-  self->ini_fila_proc = lst_insere_ordenado(self->ini_fila_proc, processo->id, prioridade);
+Lista_processos* so_coloca_fila_pronto(so_t* self, processo_t* processo){
+  float prio = 0.5; //simples e round-robin
+  switch (self->escalonador){
+  case simples:
+    self->ini_fila_proc_prontos = lst_adicionar_final(self->ini_fila_proc_prontos, processo->id, processo->prio);
+    break;
+  case round_robin:
+    self->ini_fila_proc_prontos = lst_adicionar_final(self->ini_fila_proc_prontos, processo->id, processo->prio);
+    break;
+  case prioridade:
+    prio = so_calcula_prioridade(processo);
+    self->ini_fila_proc_prontos = lst_insere_ordenado(self->ini_fila_proc_prontos, processo->id, prio);
+  default:
+    console_printf("SO: escalonador nao encontrado");
+    break;
+  }  
+  return self->ini_fila_proc_prontos;
 }
 
 int so_busca_entrada_tabela(so_t* self){
@@ -806,7 +861,7 @@ processo_t* so_proximo_pendente(so_t* self){
 }
 
 processo_t* so_proximo_pronto(so_t* self){
-  Lista_processos* l = self->ini_fila_proc;
+  Lista_processos* l = self->ini_fila_proc_prontos;
   while(l != NULL){
     if(l->estado == pronto){
       int indice = encontra_indice_processo(self->processos, l->id);
