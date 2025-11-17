@@ -56,6 +56,7 @@ processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam);
 int entrada_livre_tabela_proc(processo_t processos[MAX_PROCESSOS]);
 int encontra_indice_processo(processo_t processos[MAX_PROCESSOS], int id);
 void altera_estado_proc_tabela(processo_t processos[MAX_PROCESSOS], int id, estado_proc estado);
+char *estado_nome(estado_proc est);
 
 void lst_libera(Lista_processos* l);
 void lst_imprime (Lista_processos* l);
@@ -63,6 +64,7 @@ Lista_processos* lst_altera_estado(Lista_processos* l, int id, estado_proc estad
 Lista_processos* lst_insere_ordenado (Lista_processos* l, int id, float prio);
 Lista_processos* lst_adicionar_final(Lista_processos* l, int id, float prio);
 Lista_processos* lst_retira (Lista_processos* l, int id);
+Lista_processos* lst_busca(Lista_processos* l, int id);
 void lst_atualiza_prioridades(Lista_processos *l);
 
 Historico_processos* inicializa_historico_proc(int id, int tempo);

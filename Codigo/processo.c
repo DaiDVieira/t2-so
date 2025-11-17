@@ -21,7 +21,7 @@ processo_t* inicializa_processo(processo_t* processo, int id, int PC, int tam){
     processo->memTam = tam;
     processo->t_cpu = 0;
     processo->n_exec = 0;
-    processo->prio = 0.0;
+    processo->prio = 0.5;
     processo->id_terminal = (id % 4) * 4;     //0-3, 4-7, 8-11, 12-15
     processo->espera_terminal = 0;     //Sem espera = 0, Le = 1, Escreve = 2
     processo->quantum = QUANTUM_INICIAL;
@@ -41,6 +41,19 @@ void altera_estado_proc_tabela(processo_t processos[MAX_PROCESSOS], int id, esta
     if(indice != -1){
         processos[indice].estado = estado;
     }
+}
+
+static char *nomes_estados[3] = {
+  [bloqueado] =   "Bloqueado",
+  [pronto] = "Pronto",
+  [morto] = "Morto",
+};
+
+// retorna o nome da interrupção
+char *estado_nome(estado_proc est)
+{
+  if (est < 0 || est > 3) return "DESCONHECIDA";
+  return nomes_estados[est];
 }
 
 // ---------------------------------------------------------------------
@@ -111,12 +124,17 @@ Lista_processos* lst_adicionar_final(Lista_processos* l, int id, float prio){
 	}
     else{
         Lista_processos* aux = l;
-        while(aux->prox) 
-            aux = aux->prox;
+        if(!lst_vazia(l)){
+            while(aux->prox != NULL) 
+                aux = aux->prox;
+            aux->prox = p;
+        }
+        else{
+            l = p;
+        }
         p->id = id;
         p->prio = prio;
         p->prox = NULL;
-        aux->prox = p;
     }
 	return l;
 }
@@ -139,6 +157,15 @@ Lista_processos* lst_retira(Lista_processos* l, int id){
     }
     free(p);
     return l;
+}
+
+Lista_processos* lst_busca(Lista_processos* l, int id){
+    Lista_processos* p;
+    for (p = l; p != NULL; p = p->prox){
+        if(p->id == id)
+            return p;
+    }
+    return NULL;
 }
 
 // ---------------------------------------------------------------------
