@@ -43,6 +43,7 @@ struct historico_processos {
     int n_preempcoes;      /*Numero de vezes que foi escalonado*/
     int tempo_espera;       /*Tempo entre de espera entre desbloqueio e escalonamento - total para no final pegar media*/
     int quant_irq[TIPOS_IRQ];
+    int tempo_desde_ult_estado;
     int tempo_estado[TIPOS_ESTADOS];
     int quant_estado[TIPOS_ESTADOS];
     struct historico_processos* prox;

@@ -95,7 +95,7 @@ Lista_processos* lst_insere_ordenado(Lista_processos* l, int id, float prio){
     Lista_processos* ant = NULL; /* ponteiro para elemento anterior */
     Lista_processos* p = l; /* ponteiro para percorrer a lista */
     /* procura posição de inserção */
-    while (p != NULL && p->prio >= prio){ 
+    while (p != NULL && p->prio <= prio){ 
         ant = p; 
         p = p->prox; 
     }
@@ -180,6 +180,7 @@ Historico_processos* inicializa_historico_proc(int id, int tempo){
     novo->tempo_vida = tempo;
     novo->n_preempcoes = 0;
     novo->tempo_espera = 0;
+    novo->tempo_desde_ult_estado = tempo;
     for(int i = 0; i < TIPOS_IRQ; i++){
         novo->quant_irq[i] = 0;
     }

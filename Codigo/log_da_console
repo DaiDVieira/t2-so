@@ -1,0 +1,1556 @@
+CMD: 'c'
+SO: recebi IRQ 0 (Reset)
+SO: carga de 'trata_int.maq' em 60-72
+SO: carga de 'init.maq' em 100-270
+endereco carga init 100
+id eh 0
+(init id_terminal 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 2
+(id_proc 0, id_terminal 0) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 7
+SO: carga de 'p1.maq' em 7000-7241
+id diferente de zero
+(id_proc: 1, ini_proc 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 7
+SO: carga de 'p2.maq' em 8000-8243
+id diferente de zero
+(id_proc: 2, ini_proc 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 7
+SO: carga de 'p3.maq' em 9000-9241
+id diferente de zero
+(id_proc: 3, ini_proc 0)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 0)
+SO: chamada de sistema 9
+(proc 0 esta em proc_prontos)
+(proc_pronto id 1)
+(so_escalona)
+(prox_proc_id 1)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+SO: problema no acesso à tela
+(depois while processo pendente)
+espera_terminal=2 erro: 7
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+SO: problema no acesso à tela
+(depois while processo pendente)
+espera_terminal=2 erro: 7
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+SO: problema no acesso à tela
+(depois while processo pendente)
+espera_terminal=2 erro: 7
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+SO: problema no acesso à tela
+(depois while processo pendente)
+espera_terminal=2 erro: 7
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+SO: problema no acesso à tela
+(depois while processo pendente)
+espera_terminal=2 erro: 7
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 3 (E/S: relógio)
+(irq proc_id 1)
+(so_escalona)
+inicio cpu_interrompe 
+SO: recebi IRQ 2 (Chamada de sistema)
+(irq proc_id 1)
+SO: chamada de sistema 2
+(id_proc 1, id_terminal 4) 
+SO: problema no acesso à tela
+(depois while 
