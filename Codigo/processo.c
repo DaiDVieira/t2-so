@@ -117,6 +117,7 @@ Lista_processos* lst_insere_ordenado(Lista_processos* l, int id, float prio){
 }
 
 Lista_processos* lst_adicionar_final(Lista_processos* l, int id, float prio){
+    console_printf("(proc_id adicionar %d)", id);
 	Lista_processos* p = (Lista_processos*)malloc(sizeof(Lista_processos));
 	if(p == NULL){
 		printf("\nFalha ao alocar memoria\n");
@@ -124,17 +125,19 @@ Lista_processos* lst_adicionar_final(Lista_processos* l, int id, float prio){
 	}
     else{
         Lista_processos* aux = l;
+        p->id = id;
+        p->prio = prio;
+        p->prox = NULL;
         if(!lst_vazia(l)){
             while(aux->prox != NULL) 
                 aux = aux->prox;
             aux->prox = p;
+            console_printf("aux id: %d prox id: %d", aux->id, aux->prox->id);
         }
         else{
             l = p;
         }
-        p->id = id;
-        p->prio = prio;
-        p->prox = NULL;
+        console_printf("(proc_adicionado_final %d)", p->id);
     }
 	return l;
 }
