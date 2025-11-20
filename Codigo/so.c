@@ -175,7 +175,7 @@ static void so_salva_estado_da_cpu(so_t *self)    /*Feito*/
 }
 
 /*Funções chamadas por so_trata_pendencias*/
-processo_t* so_proximo_pendente(so_t* self);
+processo_t* so_proximo_pendente(so_t* self, int quant_bloq);
 Lista_processos* so_coloca_fila_pronto(so_t* self, processo_t* processo);
 static void so_muda_estado_processo(so_t* self, int id_proc, estado_proc est);
 
@@ -188,27 +188,45 @@ static void so_trata_pendencias(so_t *self)
   // - contabilidades
   // - etc
   /*se esta usando terminal ou nao alocou/precisa terminal*/
-  if(self->processo_corrente != NULL || self->processo_corrente->estado == bloqueado || self->processo_corrente->espera_terminal == 0)
+  if(self->processo_corrente != NULL && (self->processo_corrente->estado == bloqueado || self->processo_corrente->espera_terminal == 0))
       self->dispositivos_livres[self->processo_corrente->id_terminal/4] = true;
   /*E/S pendente*/
   processo_t* processo_pendente = NULL;
-  while((processo_pendente = so_proximo_pendente(self)) != NULL){   /*Enquanto tiver processos pendentes*/
+  int quant_proc_bloqueado = 0;
+  while((processo_pendente = so_proximo_pendente(self, quant_proc_bloqueado)) != NULL){   /*Enquanto tiver processos pendentes*/
+    /*if (processo_pendente->id != self->processo_corrente->id)*/
+    quant_proc_bloqueado++;
     console_printf("(depois while processo pendente)");
+    int dado, estado_term;
     if(processo_pendente->espera_terminal == 1){ 
-      int teclado_ok = processo_pendente->id_terminal + TERM_TECLADO_OK;
       console_printf("verifica espera_terminal=1");
-      if(es_le(self->es, teclado_ok, &processo_pendente->A) == ERR_OK && self->dispositivos_livres[processo_pendente->id_terminal / 4]){
-        so_muda_estado_processo(self, processo_pendente->id, pronto);
+      if((es_le(self->es, processo_pendente->id_terminal + TERM_TECLADO_OK, &estado_term)) == ERR_OK){
+        if(estado_term == 0 && self->dispositivos_livres[processo_pendente->id_terminal / 4]){
+          if ((es_le(self->es, self->processo_corrente->id_terminal + TERM_TECLADO, &dado)) != ERR_OK)
+            console_printf("SO: problema no acesso ao teclado");
+          else{
+            self->processo_corrente->A = dado;
+            so_muda_estado_processo(self, processo_pendente->id, pronto);
+          }
+        }
       }
       else{
-        console_printf("SO: teclado nao disponivel"); /*retirar depois - depuracao*/
+        console_printf("SO: teclado nao disponivel"); 
       }
     }
     else if(processo_pendente->espera_terminal == 2){
-      int tela_ok = processo_pendente->id_terminal + TERM_TELA_OK;
-      if(es_le(self->es, tela_ok, &processo_pendente->A) == ERR_OK && self->dispositivos_livres[processo_pendente->id_terminal / 4]){
-        so_muda_estado_processo(self, processo_pendente->id, pronto);
-        console_printf("espera_terminal=2 estado: %d", processo_pendente->estado);
+      console_printf("verifica espera_terminal=2");
+      if((es_le(self->es, processo_pendente->id_terminal + TERM_TELA_OK, &estado_term)) == ERR_OK){
+        if(estado_term == 0 && self->dispositivos_livres[processo_pendente->id_terminal / 4]){
+          dado = self->processo_corrente->X;
+          if ((es_escreve(self->es,  self->processo_corrente->id_terminal + TERM_TELA, dado)) != ERR_OK)
+            console_printf("SO: problema no acesso à tela");
+          else{
+            self->processo_corrente->A = 0;
+            so_muda_estado_processo(self, processo_pendente->id, pronto);
+          }
+        }
+        console_printf("process_pend estado_term %d", estado_term);
       }
       else{
         console_printf("SO: tela nao disponivel"); /*retirar depois - depuracao*/
@@ -249,8 +267,8 @@ static void so_escalona(so_t *self)
   //   corrente não possa continuar executando, senão deixa o mesmo processo.
   //   depois, implementa um escalonador melhor
   //console_printf("(so_escalona)");
-  if(self->processo_corrente != NULL && self->ini_fila_proc_prontos != NULL && self->escalonador == prioridade){
-    if(self->processo_corrente->prio > self->ini_fila_proc_prontos->prio){
+  if(self->processo_corrente != NULL && self->escalonador == prioridade){
+    if(self->ini_fila_proc_prontos == NULL || self->processo_corrente->prio > self->ini_fila_proc_prontos->prio){
       self->ini_hist_proc = hst_atualiza_preempcoes(self->ini_hist_proc, self->processo_corrente->id);
       self->ini_fila_proc_prontos = lst_retira(self->ini_fila_proc_prontos, self->processo_corrente->id);
       self->ini_fila_proc_prontos = so_coloca_fila_pronto(self, self->processo_corrente);
@@ -274,7 +292,8 @@ static void so_escalona(so_t *self)
       self->ini_hist_proc = hst_atualiza_preempcoes(self->ini_hist_proc, self->processo_corrente->id);
     
     self->processo_corrente = prox_processo; //pode ser NULL
-    console_printf("id_proc_corr escalonado %d", self->processo_corrente->id);
+    if(self->processo_corrente != NULL)
+      console_printf("id_proc_corr escalonado %d", self->processo_corrente->id);
   }
     
   //console_printf("id proc_corrente %d ", self->processo_corrente->id);
@@ -554,37 +573,34 @@ static void so_chamada_le(so_t *self)
   //   t2: deveria usar dispositivo de entrada corrente do processo
   //for (;;) {  // espera ocupada!
   int estado;
-  if (es_le(self->es, self->processo_corrente->id_terminal + TERM_TECLADO_OK, &estado) != ERR_OK) {
+  if ((es_le(self->es, self->processo_corrente->id_terminal + TERM_TECLADO_OK, &estado)) != ERR_OK) {
     console_printf("SO: problema no acesso ao estado do teclado");
+    return;
+  }
+  if (estado != 0){
     self->processo_corrente->espera_terminal = 1;
     so_muda_estado_processo(self, self->processo_corrente->id, bloqueado);
     return;
-  }
-    //if (estado != 0) break;
+  } 
     // como não está saindo do SO, a unidade de controle não está executando seu laço.
     // esta gambiarra faz pelo menos a console ser atualizada
     // t2: com a implementação de bloqueio de processo, esta gambiarra não
     //   deve mais existir.
-  console_tictac(self->console);
+    //console_tictac(self->console);
   //}
   int dado;
-  if (es_le(self->es, self->processo_corrente->id_terminal + TERM_TECLADO, &dado) != ERR_OK) {
+  if ((es_le(self->es, self->processo_corrente->id_terminal + TERM_TECLADO, &dado)) != ERR_OK) {
     console_printf("SO: problema no acesso ao teclado");
-    self->processo_corrente->espera_terminal = 1;
-    so_muda_estado_processo(self, self->processo_corrente->id, bloqueado);
     return;
   }
-
   // escreve no reg A do processador
   // (na verdade, na posição onde o processador vai pegar o A quando retornar da int)
   // t2: se houvesse processo, deveria escrever no reg A do processo
   // t2: o acesso só deve ser feito nesse momento se for possível; se não, o processo
   //   é bloqueado, e o acesso só deve ser feito mais tarde (e o processo desbloqueado)
   
-  if(self->processo_corrente != NULL){
-    self->processo_corrente->A = dado;
-  }
-
+  /*if(self->processo_corrente != NULL)*/
+  self->processo_corrente->A = dado;
   //self->regA = dado;
 }
 
@@ -603,28 +619,32 @@ static void so_chamada_escr(so_t *self)
   int estado;
   if ((es_le(self->es, self->processo_corrente->id_terminal + TERM_TELA_OK, &estado)) != ERR_OK) {
     console_printf("SO: problema no acesso ao estado da tela");
+    return;
+  }
+  if (estado != 0){
+    console_printf("espera terminal = 2 estado = %d", estado);
     self->processo_corrente->espera_terminal = 2;
     so_muda_estado_processo(self, self->processo_corrente->id, bloqueado);
     return;
-  }
-    //if (estado != 0) break;
+  } 
     // como não está saindo do SO, a unidade de controle não está executando seu laço.
     // esta gambiarra faz pelo menos a console ser atualizada
     // t2: não deve mais existir quando houver suporte a processos, porque o SO não poderá
     //   executar por muito tempo, permitindo a execução do laço da unidade de controle
-  console_tictac(self->console);
+    //console_tictac(self->console);
   //}
-  int dado;
+  //int dado;
   // está lendo o valor de X e escrevendo o de A direto onde o processador colocou/vai pegar
   // t2: deveria usar os registradores do processo que está realizando a E/S
   // t2: caso o processo tenha sido bloqueado, esse acesso deve ser realizado em outra execução
   //   do SO, quando ele verificar que esse acesso já pode ser feito.
   //dado = self->regX;
-  dado = self->processo_corrente->X;
+  int dado = self->processo_corrente->X;
+  console_printf("dado %d", dado);
   if ((es_escreve(self->es,  self->processo_corrente->id_terminal + TERM_TELA, dado)) != ERR_OK) {
     console_printf("SO: problema no acesso à tela");
-    self->processo_corrente->espera_terminal = 2;
-    so_muda_estado_processo(self, self->processo_corrente->id, bloqueado);
+    /*self->processo_corrente->espera_terminal = 2;
+    so_muda_estado_processo(self, self->processo_corrente->id, bloqueado);*/
     return;
   }
   //self->regA = 0;
@@ -861,16 +881,22 @@ processo_t* so_cria_entrada_processo(so_t* self, int PC, int tam) {
     return &self->processos[i];
 }
 
-processo_t* so_proximo_pendente(so_t* self){
+processo_t* so_proximo_pendente(so_t* self, int quant_bloq){
   Lista_processos* l = self->ini_fila_proc;
+  int proc_bloq = 0; 
   while(l != NULL){
     if(l->estado == bloqueado){
-      int indice = encontra_indice_processo(self->processos, l->id);
-      return &self->processos[indice];
+      proc_bloq++;
+      console_printf("quant %d proc_bloq %d", quant_bloq, proc_bloq);
+      if(quant_bloq < proc_bloq){
+        int indice = encontra_indice_processo(self->processos, l->id);
+        return &self->processos[indice];
+      }
     }
     l = l->prox;
   }
-  return NULL; //nao ha processos prontos
+  console_printf("nao ha proc pendente");
+  return NULL; //nao ha processos pendentes/bloqueados
 }
 
 processo_t* so_proximo_pronto(so_t* self){
